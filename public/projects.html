@@ -289,20 +289,21 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 }
 @keyframes shimmer{ to{ background-position:-200% center; } }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <header class="site">
   <div class="wrap nav-inner">
     <a href="index.html" class="logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
     <nav class="main-nav"><ul><li><a href="index.html">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html" class="active">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
-      <a href="auth.html" class="btn btn-ghost">ورود / ثبت‌نام</a>
+      <a href="auth.html" class="btn btn-ghost" id="navAuthBtn">ورود / ثبت‌نام</a>
       <a href="project-order.html" class="btn btn-primary">شروع پروژه</a>
     </div>
   </div>
@@ -323,22 +324,22 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   <button class="filter-btn">هوش مصنوعی</button>
 </div>
 <div class="grid-3"><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="1">
-    <span class="status-badge status-active">فعال</span><div class="card-icon">📊</div><h3>داشبورد تحلیلی</h3><p>داشبورد مدیریتی پیشرفته با تحلیل داده و گزارش‌گیری آنی.</p>
-    <div class="tag-row"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">Tailwind</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="2">
-    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon">📲</div><h3>اپلیکیشن مدیریت کارها</h3><p>اپلیکیشن موبایل برای مدیریت وظایف روزانه تیم‌ها.</p>
-    <div class="tag-row"><span class="tag">React Native</span><span class="tag">Redux</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="3">
-    <span class="status-badge status-soon">به‌زودی</span><div class="card-icon">🤖</div><h3>سامانه هوش مصنوعی</h3><p>پردازش داده و مدل‌های یادگیری ماشین برای تحلیل هوشمند.</p>
-    <div class="tag-row"><span class="tag">Python</span><span class="tag">TensorFlow</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal>
-    <span class="status-badge status-update">در حال بروزرسانی</span><div class="card-icon">🛒</div><h3>فروشگاه آنلاین</h3><p>پلتفرم فروش محصولات دیجیتال با درگاه پرداخت.</p>
-    <div class="tag-row"><span class="tag">Next.js</span><span class="tag">Prisma</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="1">
-    <span class="status-badge status-active">فعال</span><div class="card-icon">🎓</div><h3>سامانه مدیریت آموزش</h3><p>پلتفرم برگزاری و مدیریت دوره‌های آنلاین.</p>
-    <div class="tag-row"><span class="tag">React</span><span class="tag">Node.js</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="2">
-    <span class="status-badge status-stopped">متوقف شده</span><div class="card-icon">📷</div><h3>گالری تصاویر هوشمند</h3><p>سامانه دسته‌بندی خودکار تصاویر با هوش مصنوعی.</p>
-    <div class="tag-row"><span class="tag">Python</span><span class="tag">OpenCV</span></div></div></a></div></div></section><footer class="site">
+    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/kids-english-app.jpg" alt="آموزش زبان انگلیسی کودکان" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش زبان انگلیسی کودکان</h3><p>اپلیکیشنی برای آموزش کامل زبان انگلیسی به کودکان با استفاده از کارت‌عکس و فیلم‌های آموزشی حروف.</p>
+    <div class="tag-row"><span class="tag">اپلیکیشن آموزشی</span><span class="tag">کودکان</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="2">
+    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/website-builder-course.png" alt="آموزش ساخت سایت" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش ساخت سایت</h3><p>آموزش مبتدی تا حرفه‌ای ساخت سایت با استفاده از سایت‌ساز گوگل، مخصوص شروع از صفر.</p>
+    <div class="tag-row"><span class="tag">آموزش</span><span class="tag">سایت‌ساز گوگل</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="3">
+    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/freefire-tutorial-app.png" alt="آموزش فری فایر" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش فری فایر</h3><p>معرفی کامل بخش‌های مختلف بازی فری‌فایر تا با آموزش کاربرد هر بخش، راحت‌تر و بهتر بازی کنید.</p>
+    <div class="tag-row"><span class="tag">آموزش</span><span class="tag">بازی</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal>
+    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/drone-toy-course.png" alt="آموزش ساخت پهباد اسباب‌بازی" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش ساخت پهباد اسباب‌بازی</h3><p>آشنایی کامل با انواع پهباد، اجزای آن و نحوه‌ی خرید قطعات، از طراحی تا پرواز.</p>
+    <div class="tag-row"><span class="tag">آموزش</span><span class="tag">پهباد</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="1">
+    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/quran-app.png" alt="سوره‌های قرآن" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>سوره‌های قرآن</h3><p>اپلیکیشنی شامل تمامی سوره‌های قرآن به همراه متن، ترجمه‌ی آیات و فایل صوتی هر آیه.</p>
+    <div class="tag-row"><span class="tag">مذهبی</span><span class="tag">اپلیکیشن</span></div></div></a><a href="project-detail.html" style="text-decoration:none;color:inherit;"><div class="card glass glass-hover" data-reveal data-reveal-delay="2">
+    <span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/dua-faraj-app.png" alt="دعای فرج" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>دعای فرج</h3><p>اپلیکیشن دعای فرج همراه با ویدیو، فایل صوتی، متن کامل و ترجمه‌ی دعا.</p>
+    <div class="tag-row"><span class="tag">مذهبی</span><span class="tag">اپلیکیشن</span></div></div></a></div></div></section><footer class="site">
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a href="index.html" class="logo" style="margin-bottom:14px;"><div class="logo-mark">E</div><div>Elmore<span class="logo-sub">STADIUM</span></div></a>
+        <a href="index.html" class="logo" style="margin-bottom:14px;"><img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;"><div>Elmore<span class="logo-sub">STADIUM</span></div></a>
         <p style="color:var(--text-1); font-size:13.5px; line-height:1.9; max-width:280px;">پلتفرم توسعه نرم‌افزار، آموزش و مدیریت پروژه — از ایده تا اجرا با قدرت برنامه‌نویسی.</p>
       </div>
       <div><h5>دسترسی سریع</h5><ul><li><a href="index.html">خانه</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="team.html">تیم</a></li></ul></div>
@@ -362,6 +363,19 @@ document.addEventListener('DOMContentLoaded', function(){
   }, { threshold: 0.12 });
   document.querySelectorAll('[data-reveal]').forEach(function(el){ revealObserver.observe(el); });
 });
+</script>
+<script>
+const SUPABASE_URL = "https://njbztdhroxxlaqgjedek.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_EmnowD_Fn5MCoUSfTqbIfQ_am__8IAB";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+(async function(){
+  const { data } = await sb.auth.getUser();
+  const btn = document.getElementById('navAuthBtn');
+  if(data && data.user && btn){
+    btn.textContent = 'پروفایل';
+    btn.href = '../user-panel/dashboard.html';
+  }
+})();
 </script>
 </body>
 </html>

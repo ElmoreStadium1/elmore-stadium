@@ -6,6 +6,7 @@
 <title>خانه | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 /* =========================================================
    Elmore Stadium — Shared Stylesheet
@@ -317,7 +318,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 </head>
 <body>
 <div id="loadingScreen">
-  <div class="loader-logo">E</div>
+  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">
   <div class="loader-bar"></div>
 </div>
 <div class="aurora"></div>
@@ -325,12 +326,12 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <header class="site">
   <div class="wrap nav-inner">
     <a href="index.html" class="logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
     <nav class="main-nav"><ul><li><a href="index.html" class="active">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
-      <a href="auth.html" class="btn btn-ghost">ورود / ثبت‌نام</a>
+      <a href="auth.html" class="btn btn-ghost" id="navAuthBtn">ورود / ثبت‌نام</a>
       <a href="project-order.html" class="btn btn-primary">شروع پروژه</a>
     </div>
   </div>
@@ -363,7 +364,7 @@ stadium.<span class="c-fn">deploy</span>();
         </div>
       </div>
       <div class="floating-badge glass" style="top:-18px; left:-14px; color:var(--violet-glow);">⚡ Fast Build</div>
-      <div class="floating-badge glass" style="bottom:-16px; right:-10px; color:#4ade80; animation-delay:1.2s;">✓ 32 پروژه فعال</div>
+      <div class="floating-badge glass" style="bottom:-16px; right:-10px; color:#4ade80; animation-delay:1.2s;">✓ 6 پروژه فعال</div>
       <div class="particle" style="width:6px;height:6px; top:20%; left:10%; animation-duration:4s;"></div>
       <div class="particle" style="width:4px;height:4px; top:60%; left:80%; animation-duration:5.5s; animation-delay:1s;"></div>
       <div class="particle" style="width:5px;height:5px; top:80%; left:30%; animation-duration:4.8s; animation-delay:2s;"></div>
@@ -373,10 +374,10 @@ stadium.<span class="c-fn">deploy</span>();
 
 <section>
   <div class="wrap grid-4">
-    <div class="stat glass glass-hover" style="text-align:center;" data-reveal><div class="num" style="font-size:30px;">۲,۴۵۶</div><div class="lbl">کاربر فعال</div></div>
-    <div class="stat glass glass-hover" style="text-align:center;" data-reveal data-reveal-delay="1"><div class="num" style="font-size:30px;">۳۲</div><div class="lbl">پروژه انجام‌شده</div></div>
-    <div class="stat glass glass-hover" style="text-align:center;" data-reveal data-reveal-delay="2"><div class="num" style="font-size:30px;">۱۸</div><div class="lbl">دوره آموزشی</div></div>
-    <div class="stat glass glass-hover" style="text-align:center;" data-reveal data-reveal-delay="3"><div class="num" style="font-size:30px;">۱۳۴</div><div class="lbl">ساعت آموزش</div></div>
+    <div class="stat glass glass-hover" style="text-align:center;" data-reveal><div class="num" id="statActiveUsers" style="font-size:30px;">۱</div><div class="lbl">کاربر فعال</div></div>
+    <div class="stat glass glass-hover" style="text-align:center;" data-reveal data-reveal-delay="1"><div class="num" style="font-size:30px;">۶</div><div class="lbl">پروژه انجام‌شده</div></div>
+    <div class="stat glass glass-hover" style="text-align:center;" data-reveal data-reveal-delay="2"><div class="num" style="font-size:30px;">۰</div><div class="lbl">دوره آموزشی</div></div>
+    <div class="stat glass glass-hover" style="text-align:center;" data-reveal data-reveal-delay="3"><div class="num" style="font-size:30px;">۰</div><div class="lbl">ساعت آموزش</div></div>
   </div>
 </section>
 
@@ -384,9 +385,9 @@ stadium.<span class="c-fn">deploy</span>();
   <div class="wrap">
     <div class="section-head" data-reveal><div class="section-eyebrow">خدمات ما</div><h2 class="section-title">هرچی برای ساخت محصول لازم داری</h2></div>
     <div class="grid-3">
-      <div class="card glass glass-hover" data-reveal><div class="card-icon">🖥️</div><h3>توسعه وب اپلیکیشن</h3><p>ساخت وب‌سایت و اپلیکیشن‌های تحت وب با Next.js و معماری مقیاس‌پذیر.</p><div class="tag-row"><span class="tag">Next.js</span><span class="tag">TypeScript</span></div></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><div class="card-icon">📱</div><h3>اپلیکیشن موبایل</h3><p>طراحی و توسعه اپلیکیشن‌های موبایل با تجربه کاربری روان.</p><div class="tag-row"><span class="tag">React Native</span><span class="tag">Firebase</span></div></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><div class="card-icon">🧠</div><h3>هوش مصنوعی</h3><p>پیاده‌سازی مدل‌ها و سامانه‌های هوشمند برای اتوماسیون کسب‌وکار.</p><div class="tag-row"><span class="tag">Python</span><span class="tag">TensorFlow</span></div></div>
+      <div class="card glass glass-hover" data-reveal><div class="card-icon">🎬</div><h3>انیمیشن‌سازی</h3><p>ساخت انیمیشن‌های تبلیغاتی و موشن‌گرافیک حرفه‌ای برای معرفی برند و محصول شما.</p><div class="tag-row"><span class="tag">After Effects</span><span class="tag">Motion Graphic</span></div></div>
+      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><div class="card-icon">📱</div><h3>اپلیکیشن‌سازی</h3><p>طراحی و توسعه اپلیکیشن‌های موبایل با تجربه کاربری روان و عملکرد سریع.</p><div class="tag-row"><span class="tag">React Native</span><span class="tag">Firebase</span></div></div>
+      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><div class="card-icon">🖥️</div><h3>سایت‌سازی</h3><p>ساخت وب‌سایت و اپلیکیشن‌های تحت وب با Next.js و معماری مقیاس‌پذیر.</p><div class="tag-row"><span class="tag">Next.js</span><span class="tag">TypeScript</span></div></div>
     </div>
   </div>
 </section>
@@ -395,13 +396,28 @@ stadium.<span class="c-fn">deploy</span>();
   <div class="wrap">
     <div class="section-head" data-reveal><div class="section-eyebrow">نمونه‌کارها</div><h2 class="section-title">پروژه‌های ما</h2></div>
     <div class="grid-3">
-      <div class="card glass glass-hover" data-reveal><span class="status-badge status-active">فعال</span><div class="card-icon">📊</div><h3>داشبورد تحلیلی</h3><p>داشبورد مدیریتی پیشرفته با تحلیل داده و گزارش‌گیری آنی.</p><div class="tag-row"><span class="tag">Next.js</span></div></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon">📲</div><h3>اپلیکیشن مدیریت کارها</h3><p>اپلیکیشن موبایل برای مدیریت وظایف روزانه تیم‌ها.</p><div class="tag-row"><span class="tag">React Native</span></div></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><span class="status-badge status-soon">به‌زودی</span><div class="card-icon">🤖</div><h3>سامانه هوش مصنوعی</h3><p>پردازش داده و مدل‌های یادگیری ماشین برای تحلیل هوشمند.</p><div class="tag-row"><span class="tag">Python</span></div></div>
+      <div class="card glass glass-hover" data-reveal><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon">📊</div><h3>داشبورد تحلیلی</h3><p>داشبورد مدیریتی پیشرفته با تحلیل داده و گزارش‌گیری آنی.</p><div class="tag-row"><span class="tag">Next.js</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon">📲</div><h3>اپلیکیشن مدیریت کارها</h3><p>اپلیکیشن موبایل برای مدیریت وظایف روزانه تیم‌ها.</p><div class="tag-row"><span class="tag">React Native</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon">🤖</div><h3>سامانه هوش مصنوعی</h3><p>پردازش داده و مدل‌های یادگیری ماشین برای تحلیل هوشمند.</p><div class="tag-row"><span class="tag">Python</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
     </div>
     <div style="text-align:center; margin-top:30px;"><a href="projects.html" class="btn btn-ghost">مشاهده همه پروژه‌ها</a></div>
   </div>
 </section>
+
+<script>
+// نمایش پیام «در حال توسعه می‌باشد» روی دکمه دانلود پروژه‌ها
+function showProjectDownloadMsg(btn){
+  const originalText = btn.textContent;
+  btn.textContent = 'در حال توسعه می‌باشد';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+  setTimeout(function(){
+    btn.textContent = originalText;
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }, 2200);
+}
+</script>
 
 <section>
   <div class="wrap">
@@ -428,7 +444,7 @@ stadium.<span class="c-fn">deploy</span>();
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a href="index.html" class="logo" style="margin-bottom:14px;"><div class="logo-mark">E</div><div>Elmore<span class="logo-sub">STADIUM</span></div></a>
+        <a href="index.html" class="logo" style="margin-bottom:14px;"><img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;"><div>Elmore<span class="logo-sub">STADIUM</span></div></a>
         <p style="color:var(--text-1); font-size:13.5px; line-height:1.9; max-width:280px;">پلتفرم توسعه نرم‌افزار، آموزش و مدیریت پروژه — از ایده تا اجرا با قدرت برنامه‌نویسی.</p>
       </div>
       <div><h5>دسترسی سریع</h5><ul><li><a href="index.html">خانه</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="team.html">تیم</a></li></ul></div>
@@ -457,6 +473,40 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+</script>
+<script>
+// اتصال به Supabase — این فایل در همه صفحات مشترک است
+const SUPABASE_URL = "https://njbztdhroxxlaqgjedek.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_EmnowD_Fn5MCoUSfTqbIfQ_am__8IAB";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// تبدیل عدد به رقم فارسی
+function toFarsiDigits(n){
+  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).replace(/[0-9]/g, d => map[d]);
+}
+
+// گرفتن تعداد کاربران ثبت‌نام‌شده از جدول profiles و نمایش آن
+async function loadActiveUsersCount(){
+  const el = document.getElementById('statActiveUsers');
+  if(!el) return;
+  const { count, error } = await sb.from('profiles').select('*', { count: 'exact', head: true });
+  if(!error && typeof count === 'number'){
+    el.textContent = toFarsiDigits(count.toLocaleString('en-US'));
+  }
+  // اگر خطا بگیریم (مثلاً به‌خاطر تنظیمات دسترسی)، همان عدد پیش‌فرض ۱ نمایش داده می‌ماند
+}
+loadActiveUsersCount();
+</script>
+<script>
+(async function(){
+  const { data } = await sb.auth.getUser();
+  const btn = document.getElementById('navAuthBtn');
+  if(data && data.user && btn){
+    btn.textContent = 'پروفایل';
+    btn.href = '../user-panel/dashboard.html';
+  }
+})();
 </script>
 </body>
 </html>
