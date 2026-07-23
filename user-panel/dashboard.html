@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سلام، امیرحسین 👋 | Elmore Stadium</title>
+<title>داشبورد | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -292,13 +292,13 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
 <aside class="sidebar glass">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item active" href="dashboard.html"><span class="nav-icon">🏠</span> داشبورد</a>
@@ -315,33 +315,31 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="nav-divider">حساب کاربری</div>
     <a class="nav-item" href="account-settings.html"><span class="nav-icon">⚙️</span> تنظیمات حساب</a>
 
+    <a class="nav-item" href="../public/index.html"><span class="nav-icon">🏠</span> بازگشت به سایت اصلی</a>
     <a class="nav-item" href="#" onclick="elmoreSignOut('../public/auth.html'); return false;"><span class="nav-icon">🚪</span> خروج</a>
   </aside>
 <main class="main">
 <div class="topbar">
-      <div><h1>سلام، امیرحسین 👋</h1><p>خلاصه‌ای از فعالیت‌های اخیر حساب شما</p></div>
+      <div><h1 id="dashGreeting">سلام 👋</h1><p>خلاصه‌ای از فعالیت‌های اخیر حساب شما</p></div>
       <div class="top-actions">
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">ا</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
     </div>
 <div class="stats-row">
-  <div class="stat glass" data-reveal data-reveal-delay="1"><div class="top"><div class="icon">🎓</div><span class="delta">+۲</span></div><div class="num">۴</div><div class="lbl">دوره‌های فعال</div></div>
-  <div class="stat glass" data-reveal data-reveal-delay="2"><div class="top"><div class="icon">📁</div><span class="delta">+۱</span></div><div class="num">۲</div><div class="lbl">پروژه در حال انجام</div></div>
-  <div class="stat glass" data-reveal data-reveal-delay="3"><div class="top"><div class="icon">🎫</div></div><div class="num">۱</div><div class="lbl">تیکت باز</div></div>
-  <div class="stat glass" data-reveal><div class="top"><div class="icon">⬇️</div></div><div class="num">۱۲</div><div class="lbl">فایل قابل دانلود</div></div>
+  <div class="stat glass" data-reveal data-reveal-delay="1"><div class="top"><div class="icon">🎓</div></div><div class="num" id="statMyCourses">۰</div><div class="lbl">دوره‌های فعال</div></div>
+  <div class="stat glass" data-reveal data-reveal-delay="2"><div class="top"><div class="icon">📁</div></div><div class="num" id="statMyProjects">۰</div><div class="lbl">پروژه در حال انجام</div></div>
+  <div class="stat glass" data-reveal data-reveal-delay="3"><div class="top"><div class="icon">🎫</div></div><div class="num" id="statOpenTickets">۰</div><div class="lbl">تیکت باز</div></div>
+  <div class="stat glass" data-reveal><div class="top"><div class="icon">⬇️</div></div><div class="num" id="statDownloads">۰</div><div class="lbl">فایل قابل دانلود</div></div>
 </div>
 <div class="grid-2" style="grid-template-columns:1.5fr 1fr;">
   <div class="panel glass" data-reveal data-reveal-delay="1">
     <div class="panel-head"><h3>پیشرفت دوره‌ها</h3><a href="my-courses.html">مشاهده همه</a></div>
-    <div style="display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--glass-brd);"><div class="card-icon" style="width:42px;height:42px;">▲</div><div style="flex:1;"><h4 style="font-size:13.5px; margin-bottom:5px;">دوره جامع Next.js</h4><div class="progress-bar"><div class="progress-fill" style="width:78%"></div></div></div><div style="font-size:11.5px;color:var(--text-2);">۷۸٪</div></div>
-    <div style="display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--glass-brd);"><div class="card-icon" style="width:42px;height:42px;">🐍</div><div style="flex:1;"><h4 style="font-size:13.5px; margin-bottom:5px;">دوره جامع Python</h4><div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div></div><div style="font-size:11.5px;color:var(--text-2);">۴۵٪</div></div>
-    <div style="display:flex; align-items:center; gap:14px; padding:12px 0;"><div class="card-icon" style="width:42px;height:42px;">⚛️</div><div style="flex:1;"><h4 style="font-size:13.5px; margin-bottom:5px;">دوره جامع React</h4><div class="progress-bar"><div class="progress-fill" style="width:20%"></div></div></div><div style="font-size:11.5px;color:var(--text-2);">۲۰٪</div></div>
+    <div id="dashCoursesProgress"><p style="color:var(--text-2); font-size:13px;">در حال بارگذاری...</p></div>
   </div>
   <div class="panel glass" data-reveal data-reveal-delay="2">
     <div class="panel-head"><h3>اعلان‌های اخیر</h3><a href="notifications.html">همه</a></div>
-    <div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--glass-brd);"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);margin-top:6px;flex-shrink:0;"></div><div><p style="font-size:12.5px;color:var(--text-1);">سفارش پروژه شما تأیید شد.</p><span style="font-size:11px;color:var(--text-2);">۲ ساعت پیش</span></div></div>
-    <div style="display:flex; gap:12px; padding:12px 0;"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);margin-top:6px;flex-shrink:0;"></div><div><p style="font-size:12.5px;color:var(--text-1);">پاسخ جدیدی برای تیکت شما ثبت شد.</p><span style="font-size:11px;color:var(--text-2);">دیروز</span></div></div>
+    <div id="dashNotifications"><p style="color:var(--text-2); font-size:13px;">در حال بارگذاری...</p></div>
   </div>
 </div>
 <div class="grid-4">
@@ -413,13 +411,17 @@ async function elmoreRequireAuth(loginPageUrl) {
 async function elmoreShowUserName() {
   const user = await elmoreGetUser();
   if (!user) return;
-  const { data: profile } = await sb.from("profiles").select("full_name").eq("id", user.id).single();
+  const { data: profile } = await sb.from("profiles").select("full_name, avatar_url").eq("id", user.id).single();
   const nameEl = document.getElementById("userChipName");
   if (nameEl) nameEl.textContent = (profile && profile.full_name) || user.email;
   const avEl = document.getElementById("userChipAvatar");
   if (avEl) {
-    const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
-    avEl.textContent = initial;
+    if (profile && profile.avatar_url) {
+      avEl.innerHTML = `<img src="${profile.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
+      avEl.textContent = initial;
+    }
   }
 }
 
@@ -436,8 +438,66 @@ function elmoreShowMessage(elementId, message, isError) {
 <script>
 (async function(){
   const user = await elmoreRequireAuth('../public/auth.html');
-  if(user){ elmoreShowUserName(); }
+  if(user){ elmoreShowUserName(); loadDashboard(user); }
 })();
+
+async function loadDashboard(user){
+  // نام و پیام خوش‌آمدگویی واقعی
+  const { data: profile } = await sb.from('profiles').select('full_name').eq('id', user.id).single();
+  const greetEl = document.getElementById('dashGreeting');
+  if(greetEl) greetEl.textContent = 'سلام، ' + ((profile && profile.full_name) || user.email) + ' 👋';
+
+  const [enrollRes, projectRes, ticketRes, notifRes, coursesRes, downloadsRes] = await Promise.all([
+    sb.from('enrollments').select('*').eq('user_id', user.id),
+    sb.from('project_orders').select('*').eq('user_id', user.id),
+    sb.from('support_tickets').select('*').eq('user_id', user.id),
+    sb.from('notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(5),
+    sb.from('courses').select('*'),
+    sb.from('downloads').select('*').eq('user_id', user.id)
+  ]);
+
+  const enrollments = enrollRes.data || [];
+  const projects = projectRes.data || [];
+  const tickets = ticketRes.data || [];
+  const notifications = notifRes.data || [];
+  const courses = coursesRes.data || [];
+  const downloads = downloadsRes.data || [];
+  const courseMap = {};
+  courses.forEach(function(c){ courseMap[c.id] = c; });
+
+  // آمار کارت‌ها بر اساس داده‌ی واقعی
+  document.getElementById('statMyCourses').textContent = toFarsiDigits(enrollments.length);
+  document.getElementById('statMyProjects').textContent = toFarsiDigits(projects.filter(function(p){ return p.status !== 'تحویل شده'; }).length);
+  document.getElementById('statOpenTickets').textContent = toFarsiDigits(tickets.filter(function(t){ return t.status === 'باز'; }).length);
+  document.getElementById('statDownloads').textContent = toFarsiDigits(downloads.length);
+
+  // پیشرفت دوره‌ها (حداکثر ۳ مورد آخر)
+  const progressEl = document.getElementById('dashCoursesProgress');
+  if(enrollments.length === 0){
+    progressEl.innerHTML = '<p style="color:var(--text-2); font-size:13px;">هنوز در هیچ دوره‌ای ثبت‌نام نکرده‌اید.</p>';
+  } else {
+    progressEl.innerHTML = enrollments.slice(0, 3).map(function(e){
+      const c = courseMap[e.course_id] || { title: 'دوره حذف‌شده', icon: '❓' };
+      return `<div style="display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--glass-brd);"><div class="card-icon" style="width:42px;height:42px;">${c.icon||'📘'}</div><div style="flex:1;"><h4 style="font-size:13.5px; margin-bottom:5px;">${c.title}</h4><div class="progress-bar"><div class="progress-fill" style="width:${e.progress||0}%"></div></div></div><div style="font-size:11.5px;color:var(--text-2);">${toFarsiDigits(e.progress||0)}٪</div></div>`;
+    }).join('');
+  }
+
+  // اعلان‌های اخیر
+  const notifEl = document.getElementById('dashNotifications');
+  if(notifications.length === 0){
+    notifEl.innerHTML = '<p style="color:var(--text-2); font-size:13px;">اعلانی وجود ندارد.</p>';
+  } else {
+    notifEl.innerHTML = notifications.map(function(n){
+      const timeAgo = new Date(n.created_at).toLocaleDateString('fa-IR');
+      return `<div style="display:flex; gap:12px; padding:12px 0; border-bottom:1px solid var(--glass-brd);"><div style="width:8px;height:8px;border-radius:50%;background:var(--purple);margin-top:6px;flex-shrink:0;"></div><div><p style="font-size:12.5px;color:var(--text-1);">${n.message||n.title||''}</p><span style="font-size:11px;color:var(--text-2);">${timeAgo}</span></div></div>`;
+    }).join('');
+  }
+}
+
+function toFarsiDigits(n){
+  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).replace(/[0-9]/g, function(d){ return map[d]; });
+}
 </script>
 
 <script>

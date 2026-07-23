@@ -292,13 +292,13 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
 <aside class="sidebar glass">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span> داشبورد</a>
@@ -315,6 +315,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="nav-divider">حساب کاربری</div>
     <a class="nav-item active" href="account-settings.html"><span class="nav-icon">⚙️</span> تنظیمات حساب</a>
 
+    <a class="nav-item" href="../public/index.html"><span class="nav-icon">🏠</span> بازگشت به سایت اصلی</a>
     <a class="nav-item" href="#" onclick="elmoreSignOut('../public/auth.html'); return false;"><span class="nav-icon">🚪</span> خروج</a>
   </aside>
 <main class="main">
@@ -334,9 +335,9 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </div>
   <div class="panel glass" data-reveal data-reveal-delay="2">
     <div class="panel-head"><h3>تنظیمات اعلان‌ها</h3></div>
-    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>اعلان ایمیلی</span><span class="badge badge-active">فعال</span></div>
-    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>اعلان پیامکی</span><span class="badge badge-blocked">غیرفعال</span></div>
-    <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:13.5px;"><span>خبرنامه</span><span class="badge badge-active">فعال</span></div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>اعلان ایمیلی</span><span class="badge badge-active" id="notifEmailBadge" style="cursor:pointer;" onclick="toggleNotifPref('notify_email', this)">فعال</span></div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>اعلان پیامکی</span><span class="badge badge-active" id="notifSmsBadge" style="cursor:pointer;" onclick="toggleNotifPref('notify_sms', this)">فعال</span></div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:13.5px;"><span>خبرنامه</span><span class="badge badge-active" id="notifNewsletterBadge" style="cursor:pointer;" onclick="toggleNotifPref('notify_newsletter', this)">فعال</span></div>
     <div style="margin-top:20px; padding-top:16px; border-top:1px solid var(--glass-brd);">
       <h4 style="font-size:13.5px; color:#f87171; margin-bottom:8px;">منطقه خطر</h4>
       <button class="btn btn-danger btn-sm">حذف حساب کاربری</button>
@@ -406,13 +407,17 @@ async function elmoreRequireAuth(loginPageUrl) {
 async function elmoreShowUserName() {
   const user = await elmoreGetUser();
   if (!user) return;
-  const { data: profile } = await sb.from("profiles").select("full_name").eq("id", user.id).single();
+  const { data: profile } = await sb.from("profiles").select("full_name, avatar_url").eq("id", user.id).single();
   const nameEl = document.getElementById("userChipName");
   if (nameEl) nameEl.textContent = (profile && profile.full_name) || user.email;
   const avEl = document.getElementById("userChipAvatar");
   if (avEl) {
-    const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
-    avEl.textContent = initial;
+    if (profile && profile.avatar_url) {
+      avEl.innerHTML = `<img src="${profile.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
+      avEl.textContent = initial;
+    }
   }
 }
 
@@ -427,10 +432,39 @@ function elmoreShowMessage(elementId, message, isError) {
 
 </script>
 <script>
+let settingsUser = null;
+
 (async function(){
-  const user = await elmoreRequireAuth('../public/auth.html');
-  if(user){ elmoreShowUserName(); }
+  settingsUser = await elmoreRequireAuth('../public/auth.html');
+  if(settingsUser){ elmoreShowUserName(); loadNotifPrefs(); }
 })();
+
+async function loadNotifPrefs(){
+  const { data: profile } = await sb.from('profiles').select('notify_email, notify_sms, notify_newsletter').eq('id', settingsUser.id).single();
+  const prefs = {
+    notify_email: profile && profile.notify_email !== null && profile.notify_email !== undefined ? profile.notify_email : true,
+    notify_sms: profile && profile.notify_sms !== null && profile.notify_sms !== undefined ? profile.notify_sms : true,
+    notify_newsletter: profile && profile.notify_newsletter !== null && profile.notify_newsletter !== undefined ? profile.notify_newsletter : true
+  };
+  renderBadge('notifEmailBadge', prefs.notify_email);
+  renderBadge('notifSmsBadge', prefs.notify_sms);
+  renderBadge('notifNewsletterBadge', prefs.notify_newsletter);
+}
+
+function renderBadge(elId, isActive){
+  const el = document.getElementById(elId);
+  el.textContent = isActive ? 'فعال' : 'غیرفعال';
+  el.className = 'badge ' + (isActive ? 'badge-active' : 'badge-blocked');
+  el.dataset.active = isActive ? '1' : '0';
+}
+
+async function toggleNotifPref(column, el){
+  const newValue = el.dataset.active !== '1';
+  const update = {}; update[column] = newValue;
+  const { error } = await sb.from('profiles').upsert({ id: settingsUser.id, ...update });
+  if(error){ alert('خطا در ذخیره تنظیمات: ' + error.message); return; }
+  renderBadge(el.id, newValue);
+}
 </script>
 
 <script>

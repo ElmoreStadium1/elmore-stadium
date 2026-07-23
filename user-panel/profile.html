@@ -292,13 +292,13 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
 <aside class="sidebar glass">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span> داشبورد</a>
@@ -315,6 +315,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="nav-divider">حساب کاربری</div>
     <a class="nav-item" href="account-settings.html"><span class="nav-icon">⚙️</span> تنظیمات حساب</a>
 
+    <a class="nav-item" href="../public/index.html"><span class="nav-icon">🏠</span> بازگشت به سایت اصلی</a>
     <a class="nav-item" href="#" onclick="elmoreSignOut('../public/auth.html'); return false;"><span class="nav-icon">🚪</span> خروج</a>
   </aside>
 <main class="main">
@@ -326,7 +327,9 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       </div>
     </div><div class="grid-2" style="grid-template-columns:1fr 2fr;">
   <div class="panel glass" style="text-align:center;" data-reveal data-reveal-delay="1">
-    <div class="avatar" style="width:96px;height:96px;font-size:32px;" id="profileAvatar">؟</div>
+    <div class="avatar" style="width:96px;height:96px;font-size:32px;overflow:hidden;padding:0;position:relative;" id="profileAvatar">؟</div>
+    <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(this.files[0])">
+    <button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="document.getElementById('avatarInput').click()">تغییر عکس پروفایل</button>
     <h3 style="margin:12px 0 4px;" id="profileNameDisplay">در حال بارگذاری...</h3>
     <p style="color:var(--text-2); font-size:12.5px; margin-bottom:16px;" id="profileEmailDisplay"></p>
   </div>
@@ -402,13 +405,17 @@ async function elmoreRequireAuth(loginPageUrl) {
 async function elmoreShowUserName() {
   const user = await elmoreGetUser();
   if (!user) return;
-  const { data: profile } = await sb.from("profiles").select("full_name").eq("id", user.id).single();
+  const { data: profile } = await sb.from("profiles").select("full_name, avatar_url").eq("id", user.id).single();
   const nameEl = document.getElementById("userChipName");
   if (nameEl) nameEl.textContent = (profile && profile.full_name) || user.email;
   const avEl = document.getElementById("userChipAvatar");
   if (avEl) {
-    const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
-    avEl.textContent = initial;
+    if (profile && profile.avatar_url) {
+      avEl.innerHTML = `<img src="${profile.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
+      avEl.textContent = initial;
+    }
   }
 }
 
@@ -429,12 +436,39 @@ async function loadProfile(){
   const { data: profile } = await sb.from('profiles').select('*').eq('id', profileUser.id).single();
   document.getElementById('pfEmail').value = profileUser.email;
   document.getElementById('profileEmailDisplay').textContent = profileUser.email;
-  if(profile){
-    document.getElementById('pfFullName').value = profile.full_name || '';
-    document.getElementById('pfPhone').value = profile.phone || '';
-    document.getElementById('profileNameDisplay').textContent = profile.full_name || profileUser.email;
-    document.getElementById('profileAvatar').textContent = (profile.full_name || '?').trim().charAt(0);
+
+  const displayName = (profile && profile.full_name) || profileUser.email;
+  document.getElementById('pfFullName').value = (profile && profile.full_name) || '';
+  document.getElementById('pfPhone').value = (profile && profile.phone) || '';
+  document.getElementById('profileNameDisplay').textContent = displayName;
+  renderAvatar((profile && profile.avatar_url) || null, displayName);
+}
+
+function renderAvatar(avatarUrl, displayName){
+  const avatarEl = document.getElementById('profileAvatar');
+  if(avatarUrl){
+    avatarEl.innerHTML = `<img src="${avatarUrl}" alt="عکس پروفایل" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    avatarEl.textContent = (displayName || '?').trim().charAt(0);
   }
+}
+
+async function uploadAvatar(file){
+  if(!file) return;
+  const ext = file.name.split('.').pop();
+  const filePath = `${profileUser.id}/avatar.${ext}`;
+
+  const { error: uploadError } = await sb.storage.from('avatars').upload(filePath, file, { upsert: true });
+  if(uploadError){ elmoreShowMessage('pfMsg', 'خطا در آپلود عکس: ' + uploadError.message, true); return; }
+
+  const { data: publicUrlData } = sb.storage.from('avatars').getPublicUrl(filePath);
+  const avatarUrl = publicUrlData.publicUrl + '?t=' + Date.now();
+
+  const { error: saveError } = await sb.from('profiles').upsert({ id: profileUser.id, avatar_url: avatarUrl });
+  if(saveError){ elmoreShowMessage('pfMsg', 'خطا در ذخیره عکس: ' + saveError.message, true); return; }
+
+  renderAvatar(avatarUrl, document.getElementById('profileNameDisplay').textContent);
+  elmoreShowMessage('pfMsg', 'عکس پروفایل با موفقیت به‌روزرسانی شد.', false);
 }
 
 async function saveProfile(){
@@ -450,8 +484,9 @@ async function saveProfile(){
 
   if(error){ elmoreShowMessage('pfMsg', 'خطا: ' + error.message, true); return; }
   elmoreShowMessage('pfMsg', 'اطلاعات با موفقیت ذخیره شد.', false);
-  document.getElementById('profileNameDisplay').textContent = fullName;
-  document.getElementById('profileAvatar').textContent = fullName.charAt(0);
+  document.getElementById('profileNameDisplay').textContent = fullName || profileUser.email;
+  renderAvatar(null, fullName || profileUser.email);
+  loadProfile();
 }
 
 (async function(){

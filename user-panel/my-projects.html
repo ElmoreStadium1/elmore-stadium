@@ -292,13 +292,13 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
 <aside class="sidebar glass">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span> داشبورد</a>
@@ -315,6 +315,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="nav-divider">حساب کاربری</div>
     <a class="nav-item" href="account-settings.html"><span class="nav-icon">⚙️</span> تنظیمات حساب</a>
 
+    <a class="nav-item" href="../public/index.html"><span class="nav-icon">🏠</span> بازگشت به سایت اصلی</a>
     <a class="nav-item" href="#" onclick="elmoreSignOut('../public/auth.html'); return false;"><span class="nav-icon">🚪</span> خروج</a>
   </aside>
 <main class="main">
@@ -394,13 +395,17 @@ async function elmoreRequireAuth(loginPageUrl) {
 async function elmoreShowUserName() {
   const user = await elmoreGetUser();
   if (!user) return;
-  const { data: profile } = await sb.from("profiles").select("full_name").eq("id", user.id).single();
+  const { data: profile } = await sb.from("profiles").select("full_name, avatar_url").eq("id", user.id).single();
   const nameEl = document.getElementById("userChipName");
   if (nameEl) nameEl.textContent = (profile && profile.full_name) || user.email;
   const avEl = document.getElementById("userChipAvatar");
   if (avEl) {
-    const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
-    avEl.textContent = initial;
+    if (profile && profile.avatar_url) {
+      avEl.innerHTML = `<img src="${profile.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
+      avEl.textContent = initial;
+    }
   }
 }
 

@@ -292,13 +292,13 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
 <aside class="sidebar glass">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">🏠</span> داشبورد</a>
@@ -315,6 +315,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="nav-divider">حساب کاربری</div>
     <a class="nav-item" href="account-settings.html"><span class="nav-icon">⚙️</span> تنظیمات حساب</a>
 
+    <a class="nav-item" href="../public/index.html"><span class="nav-icon">🏠</span> بازگشت به سایت اصلی</a>
     <a class="nav-item" href="#" onclick="elmoreSignOut('../public/auth.html'); return false;"><span class="nav-icon">🚪</span> خروج</a>
   </aside>
 <main class="main">
@@ -324,18 +325,84 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">ا</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
-    </div><div class="panel glass" style="max-width:640px;" data-reveal data-reveal-delay="1">
+    </div><div class="panel glass" style="max-width:640px; margin-bottom:22px;" data-reveal data-reveal-delay="1">
   <div class="panel-head"><h3>درخواست عضویت در تیم</h3></div>
   <div class="field-row-2">
-    <div class="field"><label>تخصص</label><select><option>بک‌اند دولوپر</option><option>فرانت‌اند دولوپر</option><option>فول‌استک دولوپر</option><option>طراح رابط کاربری</option></select></div>
-    <div class="field"><label>سابقه کاری</label><input placeholder="مثلاً: ۲ سال"></div>
+    <div class="field"><label>نام</label><input id="mrFirstName" placeholder="نام"></div>
+    <div class="field"><label>نام خانوادگی</label><input id="mrLastName" placeholder="نام خانوادگی"></div>
   </div>
-  <div class="field"><label>توضیحات</label><textarea placeholder="درباره خودتان و مهارت‌هایتان بنویسید..."></textarea></div>
-  <div class="field"><label>نمونه کار</label><div class="file-drop">فایل نمونه کار یا لینک را اینجا آپلود کنید</div></div>
-  <button class="btn btn-primary">ارسال درخواست</button>
+  <div class="field-row-2">
+    <div class="field"><label>سن</label><input id="mrAge" type="number" placeholder="سن"></div>
+    <div class="field"><label>شماره تماس</label><input id="mrPhone" placeholder="۰۹۱۲xxxxxxx"></div>
+  </div>
+  <div class="field"><label>تخصص</label><select id="mrSpecialty"><option>بک‌اند دولوپر</option><option>فرانت‌اند دولوپر</option><option>فول‌استک دولوپر</option><option>طراح رابط کاربری</option><option>سایر</option></select></div>
+  <div class="field"><label>توضیحات</label><textarea id="mrDesc" placeholder="درباره خودتان و مهارت‌هایتان بنویسید..."></textarea></div>
+  <div class="field"><label>نمونه کار</label><div class="file-drop">فایل نمونه کار یا لینک را اینجا آپلود کنید (کلیک کنید)</div></div>
+  <p id="mrMsg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
+  <button class="btn btn-primary btn-block" id="mrBtn" onclick="submitMembership()">ارسال درخواست</button>
+</div>
+<div class="panel glass" style="max-width:640px;" data-reveal data-reveal-delay="2">
+  <div class="panel-head"><h3>درخواست‌های قبلی من</h3></div>
+  <div id="myRequestsList"><p style="color:var(--text-2); font-size:13.5px;">در حال بارگذاری...</p></div>
 </div>
 </main>
 </div>
+
+<script>
+async function submitMembership(){
+  const user = await elmoreGetUser();
+  if(!user){
+    elmoreShowMessage('mrMsg', 'برای ارسال درخواست، اول باید وارد حساب خود شوید. در حال انتقال...', true);
+    setTimeout(()=>{ window.location.href = '../public/auth.html'; }, 1500);
+    return;
+  }
+  const firstName = document.getElementById('mrFirstName').value.trim();
+  const lastName = document.getElementById('mrLastName').value.trim();
+  const age = document.getElementById('mrAge').value.trim();
+  const phone = document.getElementById('mrPhone').value.trim();
+  const specialty = document.getElementById('mrSpecialty').value;
+  const desc = document.getElementById('mrDesc').value.trim();
+
+  if(!firstName || !lastName || !phone){ elmoreShowMessage('mrMsg', 'لطفاً نام، نام خانوادگی و شماره تماس را وارد کنید', true); return; }
+
+  const fullDescription = `نام: ${firstName} ${lastName} | سن: ${age || '-'} | تماس: ${phone}\n${desc}`;
+
+  const btn = document.getElementById('mrBtn');
+  btn.textContent = 'در حال ارسال...'; btn.disabled = true;
+  const { error } = await sb.from('membership_requests').insert({
+    user_id: user.id, specialty, description: fullDescription, status: 'در انتظار بررسی'
+  });
+  btn.textContent = 'ارسال درخواست'; btn.disabled = false;
+
+  if(error){ elmoreShowMessage('mrMsg', 'خطا: ' + error.message, true); return; }
+  elmoreShowMessage('mrMsg', 'درخواست شما ثبت شد! تیم ما به‌زودی بررسی می‌کند.', false);
+  document.getElementById('mrFirstName').value = '';
+  document.getElementById('mrLastName').value = '';
+  document.getElementById('mrAge').value = '';
+  document.getElementById('mrPhone').value = '';
+  document.getElementById('mrDesc').value = '';
+  loadMyMembershipRequests();
+}
+
+async function loadMyMembershipRequests(){
+  const user = await elmoreGetUser();
+  const listEl = document.getElementById('myRequestsList');
+  if(!user || !listEl) return;
+  const { data, error } = await sb.from('membership_requests').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
+  if(error || !data || data.length === 0){
+    listEl.innerHTML = '<p style="color:var(--text-2); font-size:13.5px;">هنوز درخواستی ثبت نکرده‌اید.</p>';
+    return;
+  }
+  const statusClass = { 'در انتظار بررسی':'status-progress', 'تأیید شده':'status-active', 'رد شده':'status-stopped' };
+  listEl.innerHTML = data.map(function(r){
+    const cls = statusClass[r.status] || 'status-progress';
+    return `<div style="padding:12px 0; border-bottom:1px solid var(--glass-brd);">
+      <span class="status-badge ${cls}">${r.status || 'در انتظار بررسی'}</span>
+      <p style="margin-top:8px; font-size:13.5px; color:var(--text-1);">${r.specialty || ''}</p>
+    </div>`;
+  }).join('');
+}
+</script>
 
 <script>
 // اتصال به Supabase — این فایل در همه صفحات مشترک است
@@ -397,13 +464,17 @@ async function elmoreRequireAuth(loginPageUrl) {
 async function elmoreShowUserName() {
   const user = await elmoreGetUser();
   if (!user) return;
-  const { data: profile } = await sb.from("profiles").select("full_name").eq("id", user.id).single();
+  const { data: profile } = await sb.from("profiles").select("full_name, avatar_url").eq("id", user.id).single();
   const nameEl = document.getElementById("userChipName");
   if (nameEl) nameEl.textContent = (profile && profile.full_name) || user.email;
   const avEl = document.getElementById("userChipAvatar");
   if (avEl) {
-    const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
-    avEl.textContent = initial;
+    if (profile && profile.avatar_url) {
+      avEl.innerHTML = `<img src="${profile.avatar_url}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+    } else {
+      const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
+      avEl.textContent = initial;
+    }
   }
 }
 
@@ -420,7 +491,7 @@ function elmoreShowMessage(elementId, message, isError) {
 <script>
 (async function(){
   const user = await elmoreRequireAuth('../public/auth.html');
-  if(user){ elmoreShowUserName(); }
+  if(user){ elmoreShowUserName(); loadMyMembershipRequests(); }
 })();
 </script>
 
