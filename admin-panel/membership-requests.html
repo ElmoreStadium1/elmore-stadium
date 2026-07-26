@@ -144,7 +144,12 @@ textarea{ resize:none; min-height:110px;}
 
 /* ===================== APP SHELL (user/admin panels) ===================== */
 .layout{ display:flex; min-height:100vh; position:relative; z-index:1;}
-.sidebar{ width:250px; flex-shrink:0; padding:22px 16px; border-left:1px solid var(--glass-brd); background:rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:5px; position:sticky; top:0; height:100vh; overflow-y:auto;}
+.sidebar{ width:250px; flex-shrink:0; padding:22px 16px; border-left:1px solid var(--glass-brd); background:rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:5px; position:sticky; top:0; height:100vh; overflow-y:auto; transition:right .3s ease;}
+.mobile-menu-btn{ display:none; background:var(--glass); border:1px solid var(--glass-brd); border-radius:10px; width:38px; height:38px; align-items:center; justify-content:center; font-size:18px; cursor:pointer; color:var(--text-0); flex-shrink:0;}
+.sidebar-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:45;}
+.sidebar-backdrop.open{ display:block;}
+body{ overflow-x:hidden;}
+.panel{ overflow-x:auto;}
 .side-logo{ display:flex; align-items:center; gap:10px; padding:6px 8px 20px; font-weight:800; text-decoration:none;}
 .side-logo span{ font-size:9px; letter-spacing:2px; color:var(--text-2); display:block; font-weight:500;}
 .nav-item{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:11px; color:var(--text-1); text-decoration:none; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s;}
@@ -238,7 +243,9 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   .grid-3, .grid-4, .team-grid, .review-grid, .stats-row, .footer-grid, .field-row-2{ grid-template-columns:1fr 1fr;}
 }
 @media(max-width:900px){
-  .sidebar{ display:none;}
+  .mobile-menu-btn{ display:flex;}
+  .sidebar{ position:fixed; top:0; right:-270px; width:250px; height:100vh; z-index:50; box-shadow:-10px 0 30px rgba(0,0,0,.4);}
+  .sidebar.open{ right:0;}
   .stats-row, .stats-row.cols-5{ grid-template-columns:1fr 1fr;}
   .grid-2{ grid-template-columns:1fr;}
 }
@@ -291,13 +298,14 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 </style>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
-<aside class="sidebar glass">
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleMobileSidebar()"></div>
+  <aside class="sidebar glass" id="mainSidebar">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> داشبورد</a>
@@ -312,6 +320,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 
     <div class="nav-divider">درخواست‌ها</div>
     <a class="nav-item" href="orders.html"><span class="nav-icon">🧾</span> سفارش پروژه</a>
+<a class="nav-item" href="support-tickets.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
 <a class="nav-item active" href="membership-requests.html"><span class="nav-icon">📝</span> درخواست عضویت</a>
 <a class="nav-item" href="comments.html"><span class="nav-icon">💬</span> نظرات</a>
 <a class="nav-item" href="faq.html"><span class="nav-icon">❓</span> سوالات متداول</a>
@@ -327,6 +336,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <div class="topbar">
       <div><h1>درخواست‌های عضویت</h1><p>بررسی درخواست‌های پیوستن به تیم</p></div>
       <div class="top-actions">
+        <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
@@ -336,7 +346,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <div class="search-box glass"><span>🔍</span><input placeholder="جستجو..."></div>
       <button class="btn btn-primary btn-sm">+ </button>
     </div>
-    <table><thead><tr><th>تخصص</th><th>توضیحات</th><th>تاریخ ثبت</th><th>وضعیت</th></tr></thead><tbody id="mrBody"><tr><td colspan="4" style="text-align:center;color:var(--text-2);">در حال بارگذاری...</td></tr></tbody></table>
+    <table><thead><tr><th>تخصص</th><th>توضیحات</th><th>تاریخ ثبت</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody id="mrBody"><tr><td colspan="5" style="text-align:center;color:var(--text-2);">در حال بارگذاری...</td></tr></tbody></table>
   </div>
 </main>
 </div>
@@ -446,17 +456,31 @@ function elmoreShowMessage(elementId, message, isError) {
 </script>
 <script>
 async function onAdminReady(){
+  await loadMembershipRequests();
+}
+
+async function loadMembershipRequests(){
   const { data, error } = await sb.from('membership_requests').select('*').order('created_at', { ascending: false });
   const body = document.getElementById('mrBody');
-  if(error){ body.innerHTML = '<tr><td colspan="4" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
-  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--text-2);">هنوز درخواستی ثبت نشده.</td></tr>'; return; }
-  const badgeMap = { 'در انتظار':'badge-pending', 'تأیید شده':'badge-approved', 'رد شده':'badge-rejected' };
+  if(error){ body.innerHTML = '<tr><td colspan="5" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
+  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-2);">هنوز درخواستی ثبت نشده.</td></tr>'; return; }
+  const badgeMap = { 'در انتظار بررسی':'badge-pending', 'تأیید شده':'badge-approved', 'رد شده':'badge-rejected' };
   body.innerHTML = data.map(r=>{
     const cls = badgeMap[r.status] || 'badge-pending';
     const date = new Date(r.created_at).toLocaleDateString('fa-IR');
     const shortDesc = (r.description||'').slice(0,60);
-    return `<tr><td>${r.specialty||'-'}</td><td>${shortDesc}</td><td>${date}</td><td><span class="badge ${cls}">${r.status}</span></td></tr>`;
+    return `<tr><td>${r.specialty||'-'}</td><td>${shortDesc}</td><td>${date}</td><td><span class="badge ${cls}">${r.status}</span></td>
+      <td class='table-actions'>
+        <button class="icon-btn" title="تأیید" onclick="updateMembershipStatus('${r.id}', 'تأیید شده')">✅</button>
+        <button class="icon-btn" title="رد کردن" onclick="updateMembershipStatus('${r.id}', 'رد شده')">❌</button>
+      </td></tr>`;
   }).join('');
+}
+
+async function updateMembershipStatus(id, newStatus){
+  const { error } = await sb.from('membership_requests').update({ status: newStatus }).eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadMembershipRequests();
 }
 </script>
 
@@ -473,6 +497,13 @@ document.addEventListener('DOMContentLoaded', function(){
   }, { threshold: 0.12 });
   document.querySelectorAll('[data-reveal]').forEach(function(el){ revealObserver.observe(el); });
 });
+</script>
+
+<script>
+function toggleMobileSidebar(){
+  document.getElementById('mainSidebar').classList.toggle('open');
+  document.getElementById('sidebarBackdrop').classList.toggle('open');
+}
 </script>
 </body>
 </html>

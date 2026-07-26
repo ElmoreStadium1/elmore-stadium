@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>پنل مدیریت | Elmore Stadium</title>
+<title>تیکت‌های پشتیبانی | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -308,7 +308,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
-    <a class="nav-item active" href="dashboard.html"><span class="nav-icon">📊</span> داشبورد</a>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> داشبورد</a>
 
     <div class="nav-divider">مدیریت محتوا</div>
     <a class="nav-item" href="users.html"><span class="nav-icon">👥</span> کاربران</a>
@@ -320,7 +320,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 
     <div class="nav-divider">درخواست‌ها</div>
     <a class="nav-item" href="orders.html"><span class="nav-icon">🧾</span> سفارش پروژه</a>
-<a class="nav-item" href="support-tickets.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
+<a class="nav-item active" href="support-tickets.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
 <a class="nav-item" href="membership-requests.html"><span class="nav-icon">📝</span> درخواست عضویت</a>
 <a class="nav-item" href="comments.html"><span class="nav-icon">💬</span> نظرات</a>
 <a class="nav-item" href="faq.html"><span class="nav-icon">❓</span> سوالات متداول</a>
@@ -334,52 +334,16 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </aside>
 <main class="main">
 <div class="topbar">
-      <div><h1>پنل مدیریت</h1><p>نمای کلی از وضعیت پلتفرم Elmore Stadium</p></div>
+      <div><h1>تیکت‌های پشتیبانی</h1><p>پاسخ‌گویی و مدیریت تیکت‌های کاربران</p></div>
       <div class="top-actions">
         <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
-    </div>
-<div class="stats-row cols-5">
-  <div class="stat glass" data-reveal data-reveal-delay="1"><div class="top"><div class="icon">👥</div></div><div class="num" id="statUsers">۰</div><div class="lbl">کاربران</div></div>
-  <div class="stat glass" data-reveal data-reveal-delay="2"><div class="top"><div class="icon">📁</div></div><div class="num" id="statProjects">۶</div><div class="lbl">پروژه‌ها</div></div>
-  <div class="stat glass" data-reveal data-reveal-delay="3"><div class="top"><div class="icon">🎓</div></div><div class="num" id="statCourses">۰</div><div class="lbl">دوره‌ها</div></div>
-  <div class="stat glass" data-reveal><div class="top"><div class="icon">🧾</div></div><div class="num" id="statOrders">۰</div><div class="lbl">سفارش‌ها</div></div>
-  <div class="stat glass" data-reveal data-reveal-delay="1"><div class="top"><div class="icon">🎫</div></div><div class="num" id="statOpenTickets">۰</div><div class="lbl">تیکت باز</div></div>
-</div>
-<div class="grid-2" style="grid-template-columns:1.6fr 1fr;">
-  <div class="panel glass" data-reveal data-reveal-delay="2">
-    <div class="panel-head"><h3>روند بازدید هفتگی <span style="font-size:11px; color:var(--text-2); font-weight:400;">(نمونه — سیستم آمار بازدید هنوز وصل نشده)</span></h3><a href="reports.html">گزارش کامل</a></div>
-    <div class="chart">
-      <div class="bar" style="height:40%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:50%"></div>
-      <div class="bar" style="height:80%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:95%"></div><div class="bar" style="height:70%"></div>
-    </div>
-    <div class="chart-labels"><span>شنبه</span><span>یکشنبه</span><span>دوشنبه</span><span>سه‌شنبه</span><span>چهارشنبه</span><span>پنجشنبه</span><span>جمعه</span></div>
+    </div><div class="panel glass" data-reveal data-reveal-delay="1">
+    <div class="panel-head"><h3>همه تیکت‌ها</h3></div>
+    <div id="ticketsAdminList"><p style="text-align:center;color:var(--text-2);">در حال بارگذاری...</p></div>
   </div>
-  <div class="panel glass" data-reveal data-reveal-delay="3">
-    <div class="panel-head"><h3>توزیع پروژه‌ها</h3></div>
-    <div class="donut-wrap">
-      <div class="donut" style="background:conic-gradient(var(--purple) 0deg 210deg, var(--cyan) 210deg 300deg, #f472b6 300deg 360deg);"></div>
-      <div class="donut-legend">
-        <div><span class="dot" style="background:var(--purple)"></span> وب اپلیکیشن (۵۸٪)</div>
-        <div><span class="dot" style="background:var(--cyan)"></span> موبایل (۲۵٪)</div>
-        <div><span class="dot" style="background:#f472b6"></span> هوش مصنوعی (۱۷٪)</div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="panel glass" style="margin-bottom:20px;" data-reveal>
-  <div class="panel-head"><h3>آخرین کاربران ثبت‌نامی</h3><a href="users.html">مدیریت کاربران</a></div>
-  <table><thead><tr><th>کاربر</th><th>ایمیل</th><th>تاریخ عضویت</th></tr></thead>
-  <tbody id="recentUsersBody"><tr><td colspan="3" style="text-align:center;color:var(--text-2);">در حال بارگذاری...</td></tr></tbody></table>
-</div>
-<div class="grid-4">
-  <a href="orders.html" class="qa glass"><div class="icon">🧾</div><p>سفارش‌های جدید</p><span id="qaOrders">در حال بارگذاری...</span></a>
-  <a href="membership-requests.html" class="qa glass"><div class="icon">📝</div><p>درخواست عضویت</p><span id="qaMembership">در حال بارگذاری...</span></a>
-  <a href="comments.html" class="qa glass"><div class="icon">💬</div><p>نظرات تأیید نشده</p><span id="qaComments">به‌زودی</span></a>
-  <a href="support-tickets.html" class="qa glass"><div class="icon">🎫</div><p>تیکت‌های باز</p><span id="qaTickets">در حال بارگذاری...</span></a>
-</div>
 </main>
 </div>
 
@@ -485,45 +449,50 @@ function elmoreShowMessage(elementId, message, isError) {
   const adminUser = await elmoreRequireAdmin('../public/auth.html');
   if(adminUser){ elmoreShowUserName(); if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); } }
 })();
-
-function toFarsiDigits(n){
-  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
-  return String(n).replace(/[0-9]/g, function(d){ return map[d]; });
+</script>
+<script>
+async function onAdminReady(){
+  await loadTicketsAdmin();
 }
 
-async function onAdminReady(){
-  const [usersRes, coursesRes, ordersRes, ticketsRes, recentUsersRes] = await Promise.all([
-    sb.from('profiles').select('*', { count: 'exact', head: true }),
-    sb.from('courses').select('*', { count: 'exact', head: true }),
-    sb.from('project_orders').select('*', { count: 'exact', head: true }),
-    sb.from('support_tickets').select('*', { count: 'exact', head: true }).eq('status', 'باز'),
-    sb.from('profiles').select('*').order('created_at', { ascending: false }).limit(5)
-  ]);
+async function loadTicketsAdmin(){
+  const { data, error } = await sb.from('support_tickets').select('*').order('created_at', { ascending: false });
+  const el = document.getElementById('ticketsAdminList');
+  if(error){ el.innerHTML = '<p style="color:#f87171;">خطا: '+error.message+'</p>'; return; }
+  if(!data || data.length===0){ el.innerHTML = '<p style="text-align:center;color:var(--text-2);">هنوز تیکتی ثبت نشده.</p>'; return; }
 
-  document.getElementById('statUsers').textContent = toFarsiDigits(usersRes.count || 0);
-  document.getElementById('statCourses').textContent = toFarsiDigits(coursesRes.count || 0);
-  document.getElementById('statOrders').textContent = toFarsiDigits(ordersRes.count || 0);
-  document.getElementById('statOpenTickets').textContent = toFarsiDigits(ticketsRes.count || 0);
+  el.innerHTML = data.map(t=>{
+    const date = new Date(t.created_at).toLocaleDateString('fa-IR');
+    const isOpen = t.status === 'باز';
+    const badgeCls = isOpen ? 'badge-pending' : 'badge-approved';
+    return `<div class="glass" style="padding:18px; margin-bottom:14px; border-radius:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div><strong style="font-size:14px;">${t.subject||'-'}</strong> <span class="tag" style="margin-right:8px;">${t.category||'-'}</span></div>
+        <span class="badge ${badgeCls}">${t.status||'باز'}</span>
+      </div>
+      <p style="font-size:13px; color:var(--text-1); margin-bottom:10px;">${t.message||''}</p>
+      <span style="font-size:11px; color:var(--text-2);">${date}</span>
+      ${t.admin_reply ? `<div style="margin-top:10px; padding:10px; background:rgba(168,85,247,.08); border-radius:10px;"><strong style="font-size:12px; color:var(--violet-glow);">پاسخ شما:</strong><p style="font-size:12.5px; margin-top:4px;">${t.admin_reply}</p></div>` : ''}
+      <div style="margin-top:12px; display:flex; gap:8px; flex-wrap:wrap;">
+        <input id="reply-${t.id}" placeholder="پاسخ خود را بنویسید..." style="flex:1; min-width:180px; background:var(--glass); border:1px solid var(--glass-brd); border-radius:8px; padding:8px 12px; color:var(--text-0); font-size:12.5px;" value="${t.admin_reply||''}">
+        <button class="btn btn-primary btn-sm" onclick="sendTicketReply('${t.id}')">ثبت پاسخ</button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleTicketStatus('${t.id}', '${isOpen ? 'بسته' : 'باز'}')">${isOpen ? 'بستن تیکت' : 'باز کردن دوباره'}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
 
-  const recentBody = document.getElementById('recentUsersBody');
-  if(recentUsersRes.data && recentUsersRes.data.length > 0){
-    recentBody.innerHTML = recentUsersRes.data.map(function(u){
-      const initial = (u.full_name || u.email || '?').trim().charAt(0);
-      const date = u.created_at ? new Date(u.created_at).toLocaleDateString('fa-IR') : '-';
-      return `<tr><td><div class="u-cell"><div class="u-av">${initial}</div><strong>${u.full_name || 'بدون نام'}</strong></div></td><td>${u.email || '-'}</td><td>${date}</td></tr>`;
-    }).join('');
-  } else {
-    recentBody.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-2);">کاربری ثبت نشده.</td></tr>';
-  }
+async function sendTicketReply(id){
+  const reply = document.getElementById('reply-' + id).value.trim();
+  const { error } = await sb.from('support_tickets').update({ admin_reply: reply }).eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadTicketsAdmin();
+}
 
-  // شمارش سفارش‌ها و درخواست‌های در انتظار برای دسترسی سریع
-  const [{ count: pendingOrders }, { count: pendingMembership }] = await Promise.all([
-    sb.from('project_orders').select('*', { count: 'exact', head: true }).eq('status', 'در انتظار بررسی'),
-    sb.from('membership_requests').select('*', { count: 'exact', head: true }).eq('status', 'در انتظار بررسی')
-  ]);
-  document.getElementById('qaOrders').textContent = toFarsiDigits(pendingOrders || 0) + ' مورد در انتظار';
-  document.getElementById('qaMembership').textContent = toFarsiDigits(pendingMembership || 0) + ' مورد در انتظار';
-  document.getElementById('qaTickets').textContent = toFarsiDigits(ticketsRes.count || 0) + ' مورد باز';
+async function toggleTicketStatus(id, newStatus){
+  const { error } = await sb.from('support_tickets').update({ status: newStatus }).eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadTicketsAdmin();
 }
 </script>
 

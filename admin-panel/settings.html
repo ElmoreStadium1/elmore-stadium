@@ -144,7 +144,12 @@ textarea{ resize:none; min-height:110px;}
 
 /* ===================== APP SHELL (user/admin panels) ===================== */
 .layout{ display:flex; min-height:100vh; position:relative; z-index:1;}
-.sidebar{ width:250px; flex-shrink:0; padding:22px 16px; border-left:1px solid var(--glass-brd); background:rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:5px; position:sticky; top:0; height:100vh; overflow-y:auto;}
+.sidebar{ width:250px; flex-shrink:0; padding:22px 16px; border-left:1px solid var(--glass-brd); background:rgba(255,255,255,0.02); display:flex; flex-direction:column; gap:5px; position:sticky; top:0; height:100vh; overflow-y:auto; transition:right .3s ease;}
+.mobile-menu-btn{ display:none; background:var(--glass); border:1px solid var(--glass-brd); border-radius:10px; width:38px; height:38px; align-items:center; justify-content:center; font-size:18px; cursor:pointer; color:var(--text-0); flex-shrink:0;}
+.sidebar-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:45;}
+.sidebar-backdrop.open{ display:block;}
+body{ overflow-x:hidden;}
+.panel{ overflow-x:auto;}
 .side-logo{ display:flex; align-items:center; gap:10px; padding:6px 8px 20px; font-weight:800; text-decoration:none;}
 .side-logo span{ font-size:9px; letter-spacing:2px; color:var(--text-2); display:block; font-weight:500;}
 .nav-item{ display:flex; align-items:center; gap:12px; padding:10px 14px; border-radius:11px; color:var(--text-1); text-decoration:none; font-size:13px; font-weight:500; cursor:pointer; transition:all .2s;}
@@ -238,7 +243,9 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   .grid-3, .grid-4, .team-grid, .review-grid, .stats-row, .footer-grid, .field-row-2{ grid-template-columns:1fr 1fr;}
 }
 @media(max-width:900px){
-  .sidebar{ display:none;}
+  .mobile-menu-btn{ display:flex;}
+  .sidebar{ position:fixed; top:0; right:-270px; width:250px; height:100vh; z-index:50; box-shadow:-10px 0 30px rgba(0,0,0,.4);}
+  .sidebar.open{ right:0;}
   .stats-row, .stats-row.cols-5{ grid-template-columns:1fr 1fr;}
   .grid-2{ grid-template-columns:1fr;}
 }
@@ -291,13 +298,14 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 </style>
 </head>
 <body>
-<div id="loadingScreen">\n  <div class="loader-logo">E</div>\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
-<aside class="sidebar glass">
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleMobileSidebar()"></div>
+  <aside class="sidebar glass" id="mainSidebar">
     <a href="dashboard.html" class="side-logo">
-      <div class="logo-mark">E</div>
+      <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span>STADIUM</span></div>
     </a>
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> داشبورد</a>
@@ -312,6 +320,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 
     <div class="nav-divider">درخواست‌ها</div>
     <a class="nav-item" href="orders.html"><span class="nav-icon">🧾</span> سفارش پروژه</a>
+<a class="nav-item" href="support-tickets.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
 <a class="nav-item" href="membership-requests.html"><span class="nav-icon">📝</span> درخواست عضویت</a>
 <a class="nav-item" href="comments.html"><span class="nav-icon">💬</span> نظرات</a>
 <a class="nav-item" href="faq.html"><span class="nav-icon">❓</span> سوالات متداول</a>
@@ -327,24 +336,23 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <div class="topbar">
       <div><h1>تنظیمات سایت</h1><p>تنظیمات کلی و دسترسی‌های پلتفرم</p></div>
       <div class="top-actions">
+        <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
     </div><div class="grid-2">
   <div class="panel glass" data-reveal data-reveal-delay="1">
     <div class="panel-head"><h3>اطلاعات کلی سایت</h3></div>
-    <div class="field"><label>نام سایت</label><input value="Elmore Stadium"></div>
-    <div class="field"><label>دامنه</label><input value="elmorestadium.ir"></div>
-    <div class="field"><label>ایمیل پشتیبانی</label><input value="info@elmorestadium.ir"></div>
-    <div class="field"><label>شماره تماس</label><input value="۰۹۱۲ ۳۳۴ ۴۵۶۷"></div>
-    <button class="btn btn-primary">ذخیره تغییرات</button>
+    <p style="font-size:12px; color:var(--text-2); margin-bottom:14px;">ℹ️ این اطلاعات فعلاً فقط نمایشیه و مستقیم توی فایل‌های سایت (public/contact.html و فوتر) نوشته شده. تغییر این‌جا روی سایت زنده اثر نمی‌ذاره؛ برای تغییر واقعی باید فایل‌های سایت ویرایش بشن.</p>
+    <div class="field"><label>نام سایت</label><input value="Elmore Stadium" disabled></div>
+    <div class="field"><label>دامنه</label><input value="elmorestadium.ir" disabled></div>
+    <div class="field"><label>ایمیل پشتیبانی</label><input value="elmorestadium@gmail.com" disabled></div>
+    <div class="field"><label>شماره تماس</label><input value="0913 087 3216" disabled></div>
   </div>
   <div class="panel glass" data-reveal data-reveal-delay="2">
     <div class="panel-head"><h3>دسترسی‌ها و نقش‌ها</h3></div>
-    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>مدیر کل</span><span class="badge badge-active">۱ کاربر</span></div>
-    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>پشتیبان</span><span class="badge badge-info">۳ کاربر</span></div>
-    <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:13.5px;"><span>نویسنده محتوا</span><span class="badge badge-info">۲ کاربر</span></div>
-    <button class="btn btn-ghost" style="margin-top:16px;">+ افزودن نقش جدید</button>
+    <div id="rolesSummary"><p style="color:var(--text-2); font-size:13px;">در حال بارگذاری...</p></div>
+    <p style="font-size:12px; color:var(--text-2); margin-top:14px;">ℹ️ برای ارتقا یا کاهش دسترسی مدیر، به صفحه‌ی «کاربران» برو.</p>
   </div>
 </div>
 </main>
@@ -452,6 +460,17 @@ function elmoreShowMessage(elementId, message, isError) {
   const adminUser = await elmoreRequireAdmin('../public/auth.html');
   if(adminUser){ elmoreShowUserName(); if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); } }
 })();
+
+async function onAdminReady(){
+  const { data, error } = await sb.from('profiles').select('role');
+  const el = document.getElementById('rolesSummary');
+  if(error || !data){ el.innerHTML = '<p style="color:#f87171; font-size:13px;">خطا در بارگذاری</p>'; return; }
+  const adminCount = data.filter(function(p){ return p.role === 'admin'; }).length;
+  const userCount = data.length - adminCount;
+  el.innerHTML = `
+    <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--glass-brd);font-size:13.5px;"><span>مدیر</span><span class="badge badge-active">${adminCount} کاربر</span></div>
+    <div style="display:flex;justify-content:space-between;padding:12px 0;font-size:13.5px;"><span>کاربر عادی</span><span class="badge badge-info">${userCount} کاربر</span></div>`;
+}
 </script>
 
 <script>
@@ -467,6 +486,13 @@ document.addEventListener('DOMContentLoaded', function(){
   }, { threshold: 0.12 });
   document.querySelectorAll('[data-reveal]').forEach(function(el){ revealObserver.observe(el); });
 });
+</script>
+
+<script>
+function toggleMobileSidebar(){
+  document.getElementById('mainSidebar').classList.toggle('open');
+  document.getElementById('sidebarBackdrop').classList.toggle('open');
+}
 </script>
 </body>
 </html>
