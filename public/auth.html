@@ -350,6 +350,7 @@ async function elmoreSignUp(fullName, phone, email, password) {
       id: data.user.id,
       full_name: fullName,
       phone: phone,
+      email: email,
     });
   }
   return { data };
