@@ -524,7 +524,7 @@ loadActiveUsersCount();
 loadComments();
 
 async function loadComments(){
-  const { data, error } = await sb.from('comments').select('*').eq('status', 'تأیید شده').order('created_at', { ascending: false }).limit(6);
+  const { data, error } = await sb.from('comments').select('*').eq('is_approved', true).order('created_at', { ascending: false }).limit(6);
   const grid = document.getElementById('commentsGrid');
   if(error || !data || data.length === 0){
     grid.innerHTML = '<p style="color:var(--text-2); text-align:center; grid-column:1/-1;">هنوز نظری ثبت نشده. اولین نفری باشید که نظر می‌دهد!</p>';
