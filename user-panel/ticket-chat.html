@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تیکت پشتیبانی | Elmore Stadium</title>
+<title>گفتگوی تیکت | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -318,7 +318,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 
     <div class="nav-divider">درخواست‌ها</div>
     <a class="nav-item" href="membership-request.html"><span class="nav-icon">📝</span> درخواست عضویت</a>
-<a class="nav-item active" href="support-ticket.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
+<a class="nav-item" href="support-ticket.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
 
     <div class="nav-divider">حساب کاربری</div>
     <a class="nav-item" href="account-settings.html"><span class="nav-icon">⚙️</span> تنظیمات حساب</a>
@@ -328,25 +328,15 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </aside>
 <main class="main">
 <div class="topbar">
-      <div><h1>تیکت پشتیبانی</h1><p>ثبت و پیگیری درخواست‌های پشتیبانی</p></div>
+      <div><h1 id="playerTitle">گفتگوی تیکت</h1><p><a href="support-ticket.html" style="color:var(--violet-glow);">← بازگشت به تیکت‌های پشتیبانی</a></p></div>
       <div class="top-actions">
         <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">ا</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
-    </div><div class="grid-2" style="grid-template-columns:1fr 1.4fr;">
-  <div class="panel glass" data-reveal data-reveal-delay="1">
-    <div class="panel-head"><h3>تیکت جدید</h3></div>
-    <div class="field"><label>موضوع</label><input id="tkSubject" placeholder="موضوع تیکت"></div>
-    <div class="field"><label>دسته‌بندی</label><select id="tkCategory"><option>مشکل فنی</option><option>مالی و پرداخت</option><option>دوره‌ها</option><option>پروژه‌ها</option><option>سایر</option></select></div>
-    <div class="field"><label>توضیحات</label><textarea id="tkMessage" placeholder="مشکل خود را شرح دهید..."></textarea></div>
-    <p id="tkMsg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
-    <button class="btn btn-primary btn-block" id="tkBtn" onclick="submitTicket()">ارسال تیکت</button>
-  </div>
-  <div class="panel glass" data-reveal data-reveal-delay="2">
-    <div class="panel-head"><h3>تیکت‌های قبلی</h3></div>
-    <div id="ticketList"><p style="color:var(--text-2); font-size:13px;">در حال بارگذاری...</p></div>
-  </div>
+    </div>
+<div class="panel glass" data-reveal data-reveal-delay="1">
+  <div id="chatContent"><p style="color:var(--text-2);">در حال بارگذاری...</p></div>
 </div>
 </main>
 </div>
@@ -436,60 +426,93 @@ function elmoreShowMessage(elementId, message, isError) {
 
 </script>
 <script>
-let currentUser = null;
-
-async function loadTickets(){
-  const { data, error } = await sb.from('support_tickets')
-    .select('*')
-    .eq('user_id', currentUser.id)
-    .order('created_at', { ascending: false });
-
-  const listEl = document.getElementById('ticketList');
-  if(error){ listEl.innerHTML = '<p style="color:#f87171;font-size:13px;">خطا در بارگذاری تیکت‌ها</p>'; return; }
-  if(!data || data.length === 0){ listEl.innerHTML = '<p style="color:var(--text-2);font-size:13px;">هنوز تیکتی ثبت نکرده‌اید.</p>'; return; }
-
-  listEl.innerHTML = data.map(t => {
-    const badgeClass = t.status === 'باز' ? 'badge-open' : 'badge-closed';
-    const date = new Date(t.created_at).toLocaleDateString('fa-IR');
-    return `<a href="ticket-chat.html?ticket_id=${t.id}" style="display:block; text-decoration:none; color:inherit; padding:12px 0;border-bottom:1px solid var(--glass-brd);">
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <div><h4 style="font-size:13px;">${t.subject}</h4><span style="font-size:11px;color:var(--text-2);">${date}</span></div>
-        <span class="badge ${badgeClass}">${t.status}</span>
-      </div>
-    </a>`;
-  }).join('');
-}
-
-async function submitTicket(){
-  const subject = document.getElementById('tkSubject').value.trim();
-  const category = document.getElementById('tkCategory').value;
-  const message = document.getElementById('tkMessage').value.trim();
-  if(!subject || !message){ elmoreShowMessage('tkMsg', 'لطفاً موضوع و توضیحات را وارد کنید', true); return; }
-
-  const btn = document.getElementById('tkBtn');
-  btn.textContent = 'در حال ارسال...'; btn.disabled = true;
-  const { data: ticket, error } = await sb.from('support_tickets').insert({
-    user_id: currentUser.id, subject, category, message
-  }).select().single();
-
-  if(!error && ticket){
-    await sb.from('ticket_messages').insert({
-      ticket_id: ticket.id, sender_id: currentUser.id, sender_role: 'user', message
-    });
-  }
-  btn.textContent = 'ارسال تیکت'; btn.disabled = false;
-
-  if(error){ elmoreShowMessage('tkMsg', 'خطا: ' + error.message, true); return; }
-  elmoreShowMessage('tkMsg', 'تیکت شما با موفقیت ثبت شد. برای مکالمه، از لیست کناری روی تیکت بزنید.', false);
-  document.getElementById('tkSubject').value = '';
-  document.getElementById('tkMessage').value = '';
-  loadTickets();
-}
+let chatUser = null;
+let chatTicketId = null;
 
 (async function(){
-  currentUser = await elmoreRequireAuth('../public/auth.html');
-  if(currentUser){ elmoreShowUserName(); loadTickets(); }
+  chatUser = await elmoreRequireAuth('../public/auth.html');
+  if(chatUser){ elmoreShowUserName(); initTicketChat(chatUser); }
 })();
+
+function getQueryParam(name){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
+
+function toFarsiDigits(n){
+  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).replace(/[0-9]/g, function(d){ return map[d]; });
+}
+
+async function initTicketChat(user){
+  chatTicketId = getQueryParam('ticket_id');
+  const contentEl = document.getElementById('chatContent');
+  if(!chatTicketId){
+    contentEl.innerHTML = '<p style="color:#f87171;">تیکتی مشخص نشده است.</p>';
+    return;
+  }
+
+  const { data: ticket, error } = await sb.from('support_tickets').select('*').eq('id', chatTicketId).eq('user_id', user.id).single();
+  if(error || !ticket){
+    contentEl.innerHTML = '<p style="color:#f87171;">این تیکت یافت نشد یا متعلق به شما نیست.</p>';
+    return;
+  }
+
+  document.getElementById('playerTitle').textContent = ticket.subject;
+  renderChatShell(ticket.status);
+  await loadMessages();
+}
+
+function renderChatShell(status){
+  const contentEl = document.getElementById('chatContent');
+  const isOpen = status === 'باز';
+  contentEl.innerHTML = `
+    <div id="chatMessages" style="max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:6px;"></div>
+    ${isOpen ? `
+    <div style="display:flex; gap:8px; margin-top:16px;">
+      <input id="chatInput" placeholder="پیام خود را بنویسید..." style="flex:1; background:var(--glass); border:1px solid var(--glass-brd); border-radius:10px; padding:10px 14px; color:var(--text-0); font-size:13px;">
+      <button class="btn btn-primary" onclick="sendChatMessage()">ارسال</button>
+    </div>
+    <button class="btn btn-danger btn-sm" style="margin-top:12px;" onclick="closeTicket()">پایان و بستن تیکت</button>
+    ` : `<p style="text-align:center; color:var(--text-2); margin-top:16px;">این تیکت بسته شده است.</p>`}
+  `;
+}
+
+async function loadMessages(){
+  const { data, error } = await sb.from('ticket_messages').select('*').eq('ticket_id', chatTicketId).order('created_at', { ascending: true });
+  const msgEl = document.getElementById('chatMessages');
+  if(error){ msgEl.innerHTML = '<p style="color:#f87171;">خطا در بارگذاری پیام‌ها</p>'; return; }
+  if(!data || data.length === 0){ msgEl.innerHTML = '<p style="color:var(--text-2); font-size:13px;">هنوز پیامی ثبت نشده.</p>'; return; }
+  msgEl.innerHTML = data.map(function(m){
+    const isMe = m.sender_role === 'user';
+    const time = new Date(m.created_at).toLocaleTimeString('fa-IR', { hour:'2-digit', minute:'2-digit' });
+    return `<div style="align-self:${isMe ? 'flex-end' : 'flex-start'}; max-width:75%;">
+      <div style="background:${isMe ? 'var(--purple)' : 'var(--glass)'}; border:1px solid var(--glass-brd); border-radius:14px; padding:10px 14px; font-size:13px; color:#fff;">${m.message}</div>
+      <div style="font-size:10px; color:var(--text-2); margin-top:3px; text-align:${isMe?'left':'right'};">${isMe ? 'شما' : 'پشتیبانی'} · ${time}</div>
+    </div>`;
+  }).join('');
+  msgEl.scrollTop = msgEl.scrollHeight;
+}
+
+async function sendChatMessage(){
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if(!message) return;
+  input.value = '';
+  const { error } = await sb.from('ticket_messages').insert({
+    ticket_id: chatTicketId, sender_id: chatUser.id, sender_role: 'user', message
+  });
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadMessages();
+}
+
+async function closeTicket(){
+  if(!confirm('با بستن تیکت، این گفتگو برای همیشه حذف می‌شود. ادامه می‌دهید؟')) return;
+  await sb.from('ticket_messages').delete().eq('ticket_id', chatTicketId);
+  const { error } = await sb.from('support_tickets').delete().eq('id', chatTicketId);
+  if(error){ alert('خطا: ' + error.message); return; }
+  window.location.href = 'support-ticket.html';
+}
 </script>
 
 <script>
