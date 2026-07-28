@@ -463,7 +463,7 @@ async function loadComments(){
   body.innerHTML = data.map(function(c){
     const cls = badgeMap[c.status] || 'badge-pending';
     const date = new Date(c.created_at).toLocaleDateString('fa-IR');
-    return `<tr><td>${c.name||'-'}</td><td>${(c.message||'').slice(0,80)}</td><td>${date}</td><td><span class="badge ${cls}">${c.status}</span></td>
+    return `<tr><td>${c.name||'-'}</td><td>${(c.content||'').slice(0,80)}</td><td>${date}</td><td><span class="badge ${cls}">${c.status}</span></td>
       <td class='table-actions'>
         <button class="icon-btn" title="تأیید" onclick="updateCommentStatus('${c.id}', 'تأیید شده')">✅</button>
         <button class="icon-btn" title="رد کردن" onclick="updateCommentStatus('${c.id}', 'رد شده')">❌</button>
