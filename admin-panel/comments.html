@@ -342,12 +342,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       </div>
     </div><div class="panel glass" data-reveal data-reveal-delay="1">
     <div class="panel-head"><h3>همه نظرات</h3></div>
-    <p style="font-size:12.5px; color:var(--text-2); margin-bottom:14px;">⚠️ فعلاً هیچ صفحه‌ی عمومی‌ای توی سایت امکان ثبت نظر نداره، پس این بخش به هیچ‌جایی وصل نیست. اگه می‌خوای این قابلیت واقعی بشه (مثلاً نظر زیر پروژه‌ها یا دوره‌ها)، بگو تا اضافه‌اش کنیم.</p>
-    <div class="toolbar">
-      <div class="search-box glass"><span>🔍</span><input placeholder="جستجو..."></div>
-      <button class="btn btn-primary btn-sm">+ </button>
-    </div>
-    <table><thead><tr><th>کاربر</th><th>متن نظر</th><th>مربوط به</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody><tr><td>محمد رستمی</td><td>«همکاری با تیم فوق‌العاده بود...»</td><td>داشبورد تحلیلی</td><td><span class="badge badge-approved">تأیید شده</span></td><td class='table-actions'><span class='icon-btn'>✏️</span><span class='icon-btn'>🗑️</span></td></tr><tr><td>زهرا نوری</td><td>«دوره آموزشی خیلی کاربردی بود...»</td><td>دوره جامع Python</td><td><span class="badge badge-pending">در انتظار</span></td><td class='table-actions'><span class='icon-btn'>✏️</span><span class='icon-btn'>🗑️</span></td></tr><tr><td>علی صادقی</td><td>«پشتیبانی سریع و حرفه‌ای...»</td><td>پروژه فروشگاه آنلاین</td><td><span class="badge badge-pending">در انتظار</span></td><td class='table-actions'><span class='icon-btn'>✏️</span><span class='icon-btn'>🗑️</span></td></tr></tbody></table>
+    <table><thead><tr><th>کاربر</th><th>متن نظر</th><th>تاریخ</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody id="commentsBody"><tr><td colspan="5" style="text-align:center;color:var(--text-2);">در حال بارگذاری...</td></tr></tbody></table>
   </div>
 </main>
 </div>
@@ -454,6 +449,41 @@ function elmoreShowMessage(elementId, message, isError) {
   const adminUser = await elmoreRequireAdmin('../public/auth.html');
   if(adminUser){ elmoreShowUserName(); if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); } }
 })();
+
+async function onAdminReady(){
+  await loadComments();
+}
+
+async function loadComments(){
+  const { data, error } = await sb.from('comments').select('*').order('created_at', { ascending: false });
+  const body = document.getElementById('commentsBody');
+  if(error){ body.innerHTML = '<tr><td colspan="5" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
+  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-2);">هنوز نظری ثبت نشده.</td></tr>'; return; }
+  const badgeMap = { 'در انتظار بررسی':'badge-pending', 'تأیید شده':'badge-approved', 'رد شده':'badge-rejected' };
+  body.innerHTML = data.map(function(c){
+    const cls = badgeMap[c.status] || 'badge-pending';
+    const date = new Date(c.created_at).toLocaleDateString('fa-IR');
+    return `<tr><td>${c.name||'-'}</td><td>${(c.message||'').slice(0,80)}</td><td>${date}</td><td><span class="badge ${cls}">${c.status}</span></td>
+      <td class='table-actions'>
+        <button class="icon-btn" title="تأیید" onclick="updateCommentStatus('${c.id}', 'تأیید شده')">✅</button>
+        <button class="icon-btn" title="رد کردن" onclick="updateCommentStatus('${c.id}', 'رد شده')">❌</button>
+        <button class="icon-btn" title="حذف" onclick="deleteComment('${c.id}')">🗑️</button>
+      </td></tr>`;
+  }).join('');
+}
+
+async function updateCommentStatus(id, newStatus){
+  const { error } = await sb.from('comments').update({ status: newStatus }).eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadComments();
+}
+
+async function deleteComment(id){
+  if(!confirm('این نظر حذف شود؟')) return;
+  const { error } = await sb.from('comments').delete().eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadComments();
+}
 </script>
 
 <script>

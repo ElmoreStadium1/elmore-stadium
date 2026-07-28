@@ -478,8 +478,14 @@ async function loadMembershipRequests(){
 }
 
 async function updateMembershipStatus(id, newStatus){
-  const { error } = await sb.from('membership_requests').update({ status: newStatus }).eq('id', id);
+  const { data: request, error } = await sb.from('membership_requests').update({ status: newStatus }).eq('id', id).select().single();
   if(error){ alert('خطا: ' + error.message); return; }
+  if(request){
+    await sb.from('notifications').insert({
+      user_id: request.user_id,
+      message: `درخواست عضویت شما در تیم ${newStatus === 'تأیید شده' ? 'تأیید شد 🎉' : 'رد شد'}.`
+    });
+  }
   loadMembershipRequests();
 }
 </script>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>تیکت‌های پشتیبانی | Elmore Stadium</title>
+<title>گفتگوی تیکت | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -320,7 +320,6 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 
     <div class="nav-divider">درخواست‌ها</div>
     <a class="nav-item" href="orders.html"><span class="nav-icon">🧾</span> سفارش پروژه</a>
-<a class="nav-item active" href="support-tickets.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
 <a class="nav-item" href="membership-requests.html"><span class="nav-icon">📝</span> درخواست عضویت</a>
 <a class="nav-item" href="comments.html"><span class="nav-icon">💬</span> نظرات</a>
 <a class="nav-item" href="faq.html"><span class="nav-icon">❓</span> سوالات متداول</a>
@@ -334,15 +333,18 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </aside>
 <main class="main">
 <div class="topbar">
-      <div><h1>تیکت‌های پشتیبانی</h1><p>پاسخ‌گویی و مدیریت تیکت‌های کاربران</p></div>
+      <div><h1 id="playerTitle">گفتگوی تیکت</h1><p><a href="support-tickets.html" style="color:var(--violet-glow);">← بازگشت به تیکت‌ها</a></p></div>
       <div class="top-actions">
         <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
     </div><div class="panel glass" data-reveal data-reveal-delay="1">
-    <div class="panel-head"><h3>همه تیکت‌ها</h3></div>
-    <div id="ticketsAdminList"><p style="text-align:center;color:var(--text-2);">در حال بارگذاری...</p></div>
+    <div class="panel-head"><h3>همه سفارش‌ها</h3></div>
+    <div class="toolbar">
+      <div class="search-box glass"><span>🔍</span><input placeholder="جستجو..."></div>
+    </div>
+    <table><thead><tr><th>عنوان پروژه</th><th>بودجه</th><th>مدت</th><th>تاریخ ثبت</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody id="ordersBody"><tr><td colspan="6" style="text-align:center;color:var(--text-2);">در حال بارگذاری...</td></tr></tbody></table>
   </div>
 </main>
 </div>
@@ -452,28 +454,91 @@ function elmoreShowMessage(elementId, message, isError) {
 </script>
 <script>
 async function onAdminReady(){
-  await loadTicketsAdmin();
+  await initAdminTicketChat();
 }
 
-async function loadTicketsAdmin(){
-  const { data, error } = await sb.from('support_tickets').select('*').order('created_at', { ascending: false });
-  const el = document.getElementById('ticketsAdminList');
-  if(error){ el.innerHTML = '<p style="color:#f87171;">خطا: '+error.message+'</p>'; return; }
-  if(!data || data.length===0){ el.innerHTML = '<p style="text-align:center;color:var(--text-2);">هنوز تیکتی ثبت نشده.</p>'; return; }
+function getQueryParam(name){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
+}
 
-  el.innerHTML = data.map(t=>{
-    const date = new Date(t.created_at).toLocaleDateString('fa-IR');
-    const isOpen = t.status === 'باز';
-    const badgeCls = isOpen ? 'badge-pending' : 'badge-approved';
-    return `<a href="ticket-chat.html?ticket_id=${t.id}" class="glass" style="display:block; padding:18px; margin-bottom:14px; border-radius:14px; text-decoration:none; color:inherit;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <div><strong style="font-size:14px;">${t.subject||'-'}</strong> <span class="tag" style="margin-right:8px;">${t.category||'-'}</span></div>
-        <span class="badge ${badgeCls}">${t.status||'باز'}</span>
-      </div>
-      <p style="font-size:13px; color:var(--text-1); margin-bottom:6px;">${t.message||''}</p>
-      <span style="font-size:11px; color:var(--text-2);">${date} · برای مشاهده و پاسخ کلیک کنید</span>
-    </a>`;
+let adminChatTicketId = null;
+let adminChatUserId = null;
+
+async function initAdminTicketChat(){
+  adminChatTicketId = getQueryParam('ticket_id');
+  const contentEl = document.getElementById('chatContent');
+  if(!adminChatTicketId){
+    contentEl.innerHTML = '<p style="color:#f87171;">تیکتی مشخص نشده است.</p>';
+    return;
+  }
+  const { data: ticket, error } = await sb.from('support_tickets').select('*').eq('id', adminChatTicketId).single();
+  if(error || !ticket){
+    contentEl.innerHTML = '<p style="color:#f87171;">این تیکت یافت نشد.</p>';
+    return;
+  }
+  adminChatUserId = ticket.user_id;
+  document.getElementById('playerTitle').textContent = ticket.subject + ' (' + (ticket.category||'') + ')';
+  renderAdminChatShell(ticket.status);
+  await loadAdminMessages();
+}
+
+function renderAdminChatShell(status){
+  const contentEl = document.getElementById('chatContent');
+  const isOpen = status === 'باز';
+  contentEl.innerHTML = `
+    <div id="chatMessages" style="max-height:420px; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:6px;"></div>
+    ${isOpen ? `
+    <div style="display:flex; gap:8px; margin-top:16px;">
+      <input id="chatInput" placeholder="پاسخ خود را بنویسید..." style="flex:1; background:var(--glass); border:1px solid var(--glass-brd); border-radius:10px; padding:10px 14px; color:var(--text-0); font-size:13px;">
+      <button class="btn btn-primary" onclick="sendAdminChatMessage()">ارسال</button>
+    </div>
+    <button class="btn btn-danger btn-sm" style="margin-top:12px;" onclick="closeTicketAdmin()">بستن و حذف تیکت</button>
+    ` : `<p style="text-align:center; color:var(--text-2); margin-top:16px;">این تیکت بسته شده است.</p>`}
+  `;
+}
+
+async function loadAdminMessages(){
+  const { data, error } = await sb.from('ticket_messages').select('*').eq('ticket_id', adminChatTicketId).order('created_at', { ascending: true });
+  const msgEl = document.getElementById('chatMessages');
+  if(error){ msgEl.innerHTML = '<p style="color:#f87171;">خطا در بارگذاری پیام‌ها</p>'; return; }
+  if(!data || data.length === 0){ msgEl.innerHTML = '<p style="color:var(--text-2); font-size:13px;">هنوز پیامی ثبت نشده.</p>'; return; }
+  msgEl.innerHTML = data.map(function(m){
+    const isAdmin = m.sender_role === 'admin';
+    const time = new Date(m.created_at).toLocaleTimeString('fa-IR', { hour:'2-digit', minute:'2-digit' });
+    return `<div style="align-self:${isAdmin ? 'flex-end' : 'flex-start'}; max-width:75%;">
+      <div style="background:${isAdmin ? 'var(--purple)' : 'var(--glass)'}; border:1px solid var(--glass-brd); border-radius:14px; padding:10px 14px; font-size:13px; color:#fff;">${m.message}</div>
+      <div style="font-size:10px; color:var(--text-2); margin-top:3px; text-align:${isAdmin?'left':'right'};">${isAdmin ? 'پشتیبانی' : 'کاربر'} · ${time}</div>
+    </div>`;
   }).join('');
+  msgEl.scrollTop = msgEl.scrollHeight;
+}
+
+async function sendAdminChatMessage(){
+  const input = document.getElementById('chatInput');
+  const message = input.value.trim();
+  if(!message) return;
+  input.value = '';
+  const { data: adminUser } = await sb.auth.getUser();
+  const { error } = await sb.from('ticket_messages').insert({
+    ticket_id: adminChatTicketId, sender_id: adminUser.user.id, sender_role: 'admin', message
+  });
+  if(error){ alert('خطا: ' + error.message); return; }
+
+  // ثبت اعلان برای کاربر
+  await sb.from('notifications').insert({
+    user_id: adminChatUserId, message: 'پشتیبانی به تیکت شما پاسخ داد.'
+  });
+
+  loadAdminMessages();
+}
+
+async function closeTicketAdmin(){
+  if(!confirm('با بستن تیکت، این گفتگو برای همیشه حذف می‌شود. ادامه می‌دهید؟')) return;
+  await sb.from('ticket_messages').delete().eq('ticket_id', adminChatTicketId);
+  const { error } = await sb.from('support_tickets').delete().eq('id', adminChatTicketId);
+  if(error){ alert('خطا: ' + error.message); return; }
+  window.location.href = 'support-tickets.html';
 }
 </script>
 

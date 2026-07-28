@@ -341,13 +341,15 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
         <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName">در حال بارگذاری...</span></div>
       </div>
     </div><div class="panel glass" data-reveal data-reveal-delay="1">
+    <div class="panel-head"><h3>افزودن خبر جدید</h3></div>
+    <div class="field"><label>عنوان خبر</label><input id="newNewsTitle" placeholder="عنوان خبر"></div>
+    <div class="field"><label>متن خبر</label><textarea id="newNewsContent" placeholder="متن کامل خبر..."></textarea></div>
+    <p id="newsMsg" style="display:none; font-size:13px; margin-bottom:10px;"></p>
+    <button class="btn btn-primary btn-sm" id="addNewsBtn" onclick="addNews()">+ انتشار خبر</button>
+  </div>
+  <div class="panel glass" style="margin-top:20px;" data-reveal data-reveal-delay="2">
     <div class="panel-head"><h3>همه اخبار</h3></div>
-    <p style="font-size:12.5px; color:var(--text-2); margin-bottom:14px;">⚠️ فعلاً صفحه‌ی عمومی «اخبار» توی سایت وجود نداره، پس این بخش به هیچ‌جایی وصل نیست. اگه می‌خوای این قابلیت واقعی بشه، باید اول یه صفحه‌ی عمومی «اخبار» ساخته بشه.</p>
-    <div class="toolbar">
-      <div class="search-box glass"><span>🔍</span><input placeholder="جستجو..."></div>
-      <button class="btn btn-primary btn-sm">+ افزودن خبر</button>
-    </div>
-    <table><thead><tr><th>عنوان</th><th>تاریخ انتشار</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody><tr><td>راه‌اندازی دوره جدید React</td><td>۱۴۰۴/۰۴/۱۰</td><td><span class="badge badge-active">منتشرشده</span></td><td class='table-actions'><span class='icon-btn'>✏️</span><span class='icon-btn'>🗑️</span></td></tr><tr><td>گزارش عملکرد فصل بهار</td><td>۱۴۰۴/۰۴/۰۱</td><td><span class="badge badge-active">منتشرشده</span></td><td class='table-actions'><span class='icon-btn'>✏️</span><span class='icon-btn'>🗑️</span></td></tr><tr><td>به‌روزرسانی پنل کاربری</td><td>۱۴۰۴/۰۳/۲۰</td><td><span class="badge badge-pending">پیش‌نویس</span></td><td class='table-actions'><span class='icon-btn'>✏️</span><span class='icon-btn'>🗑️</span></td></tr></tbody></table>
+    <table><thead><tr><th>عنوان</th><th>تاریخ انتشار</th><th>عملیات</th></tr></thead><tbody id="newsBody"><tr><td colspan="3" style="text-align:center;color:var(--text-2);">در حال بارگذاری...</td></tr></tbody></table>
   </div>
 </main>
 </div>
@@ -454,6 +456,45 @@ function elmoreShowMessage(elementId, message, isError) {
   const adminUser = await elmoreRequireAdmin('../public/auth.html');
   if(adminUser){ elmoreShowUserName(); if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); } }
 })();
+
+async function onAdminReady(){
+  await loadNews();
+}
+
+async function loadNews(){
+  const { data, error } = await sb.from('news').select('*').order('created_at', { ascending: false });
+  const body = document.getElementById('newsBody');
+  if(error){ body.innerHTML = '<tr><td colspan="3" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
+  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-2);">هنوز خبری منتشر نشده.</td></tr>'; return; }
+  body.innerHTML = data.map(function(n){
+    const date = new Date(n.created_at).toLocaleDateString('fa-IR');
+    return `<tr><td>${n.title}</td><td>${date}</td><td class='table-actions'><button class="icon-btn" onclick="deleteNews('${n.id}')">🗑️</button></td></tr>`;
+  }).join('');
+}
+
+async function addNews(){
+  const title = document.getElementById('newNewsTitle').value.trim();
+  const content = document.getElementById('newNewsContent').value.trim();
+  if(!title || !content){ elmoreShowMessage('newsMsg', 'لطفاً عنوان و متن خبر را وارد کنید', true); return; }
+
+  const btn = document.getElementById('addNewsBtn');
+  btn.textContent = 'در حال انتشار...'; btn.disabled = true;
+  const { error } = await sb.from('news').insert({ title, content });
+  btn.textContent = '+ انتشار خبر'; btn.disabled = false;
+
+  if(error){ elmoreShowMessage('newsMsg', 'خطا: ' + error.message, true); return; }
+  elmoreShowMessage('newsMsg', 'خبر با موفقیت منتشر شد.', false);
+  document.getElementById('newNewsTitle').value = '';
+  document.getElementById('newNewsContent').value = '';
+  loadNews();
+}
+
+async function deleteNews(id){
+  if(!confirm('این خبر حذف شود؟')) return;
+  const { error } = await sb.from('news').delete().eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadNews();
+}
 </script>
 
 <script>

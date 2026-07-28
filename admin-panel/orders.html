@@ -478,8 +478,14 @@ async function loadOrders(){
 }
 
 async function updateOrderStatus(id, newStatus){
-  const { error } = await sb.from('project_orders').update({ status: newStatus }).eq('id', id);
+  const { data: order, error } = await sb.from('project_orders').update({ status: newStatus }).eq('id', id).select().single();
   if(error){ alert('خطا: ' + error.message); return; }
+  if(order){
+    await sb.from('notifications').insert({
+      user_id: order.user_id,
+      message: `وضعیت سفارش پروژه‌ی «${order.title}» شما به «${newStatus}» تغییر کرد.`
+    });
+  }
   loadOrders();
 }
 </script>
