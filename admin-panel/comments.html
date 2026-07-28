@@ -473,7 +473,8 @@ async function loadComments(){
 }
 
 async function updateCommentStatus(id, newStatus){
-  const { error } = await sb.from('comments').update({ status: newStatus }).eq('id', id);
+  const isApproved = newStatus === 'تأیید شده';
+  const { error } = await sb.from('comments').update({ status: newStatus, is_approved: isApproved }).eq('id', id);
   if(error){ alert('خطا: ' + error.message); return; }
   loadComments();
 }
