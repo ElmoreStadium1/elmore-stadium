@@ -537,7 +537,7 @@ async function loadComments(){
         <div class="card-icon" style="width:38px;height:38px;">${initial}</div>
         <strong style="font-size:13.5px;">${c.name || 'کاربر'}</strong>
       </div>
-      <p style="font-size:13px; color:var(--text-1); line-height:1.8;">${c.message}</p>
+      <p style="font-size:13px; color:var(--text-1); line-height:1.8;">${c.content}</p>
     </div>`;
   }).join('');
 }
@@ -559,7 +559,7 @@ async function submitComment(){
 
   const btn = document.getElementById('commentBtn');
   btn.textContent = 'در حال ارسال...'; btn.disabled = true;
-  const { error } = await sb.from('comments').insert({ user_id: user.id, name, message, status: 'در انتظار بررسی' });
+  const { error } = await sb.from('comments').insert({ user_id: user.id, name, content: message, status: 'در انتظار بررسی' });
   btn.textContent = 'ثبت نظر'; btn.disabled = false;
 
   if(error){ elmoreShowMessage2('commentMsg', 'خطا: ' + error.message, true); return; }
