@@ -532,7 +532,7 @@ async function loadComments(){
   }
   grid.innerHTML = data.map(function(c){
     const initial = (c.name || 'کاربر').trim().charAt(0);
-    return `<div class="card glass glass-hover" data-reveal>
+    return `<div class="card glass glass-hover">
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
         <div class="card-icon" style="width:38px;height:38px;">${initial}</div>
         <strong style="font-size:13.5px;">${c.name || 'کاربر'}</strong>
