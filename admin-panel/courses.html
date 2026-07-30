@@ -512,10 +512,18 @@ async function deleteCourse(id){
 </script>
 
 <script>
-window.addEventListener('load', function(){
-  var ls = document.getElementById('loadingScreen');
-  if(ls){ setTimeout(function(){ ls.classList.add('hide'); }, 450); }
-});
+(function(){
+  var elmoreLoadingHidden = false;
+  function elmoreHideLoadingScreen(){
+    if(elmoreLoadingHidden) return;
+    elmoreLoadingHidden = true;
+    var ls = document.getElementById('loadingScreen');
+    if(ls) ls.classList.add('hide');
+  }
+  window.addEventListener('load', function(){ setTimeout(elmoreHideLoadingScreen, 450); });
+  // فیل‌سیف: اگر منابع خارجی (مثل CDN) کند یا مسدود باشند، صفحه را برای همیشه پشت اسپلش‌اسکرین نگه ندار
+  setTimeout(elmoreHideLoadingScreen, 6000);
+})();
 document.addEventListener('DOMContentLoaded', function(){
   var revealObserver = new IntersectionObserver(function(entries){
     entries.forEach(function(entry){
