@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>درخواست عضویت | Elmore Stadium</title>
+<title>گالری | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -310,7 +310,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
     <div class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</div>
-    <nav class="main-nav"><ul><li><a href="index.html">خانه</a></li><li><a href="team.html" class="active">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
+    <nav class="main-nav"><ul><li><a href="index.html">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html" class="active">اخبار</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
       <a href="auth.html" class="btn btn-ghost" id="navAuthBtn">ورود / ثبت‌نام</a>
       <a href="project-order.html" class="btn btn-primary">شروع پروژه</a>
@@ -319,29 +319,15 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 </header>
 <section class="page-hero">
   <div class="wrap">
-    <div class="breadcrumb"><a href="index.html">خانه</a> / <span>تیم / درخواست عضویت</span></div>
-    <div class="eyebrow glass" style="display:inline-flex;"><span class="dot"></span> عضویت در تیم</div>
-    <h1 class="page-title">درخواست <span class='accent'>عضویت</span> در تیم</h1>
-    <p class="page-desc">اگر عاشق کدنویسی و ساخت محصولات واقعی هستید، بهمون بپیوندید.</p>
+    <div class="breadcrumb"><a href="index.html">خانه</a> / <span>گالری</span></div>
+    <div class="eyebrow glass" style="display:inline-flex;"><span class="dot"></span> گالری</div>
+    <h1 class="page-title">گالری <span class='accent'>تصاویر</span> ما</h1>
+    <p class="page-desc">نگاهی به لحظات و پروژه‌های Elmore Stadium.</p>
   </div>
 </section>
-<section><div class="wrap" style="max-width:640px;">
-  <div class="glass" style="padding:32px;">
-    <div class="field-row-2">
-      <div class="field"><label>نام</label><input id="mrFirstName" placeholder="نام"></div>
-      <div class="field"><label>نام خانوادگی</label><input id="mrLastName" placeholder="نام خانوادگی"></div>
-    </div>
-    <div class="field-row-2">
-      <div class="field"><label>سن</label><input id="mrAge" type="number" placeholder="سن"></div>
-      <div class="field"><label>شماره تماس</label><input id="mrPhone" placeholder="۰۹۱۲xxxxxxx"></div>
-    </div>
-    <div class="field"><label>تخصص</label><select id="mrSpecialty"><option>بک‌اند دولوپر</option><option>فرانت‌اند دولوپر</option><option>فول‌استک دولوپر</option><option>طراح رابط کاربری</option><option>سایر</option></select></div>
-    <div class="field"><label>توضیحات</label><textarea id="mrDesc" placeholder="درباره خودتان و مهارت‌هایتان بنویسید..."></textarea></div>
-    <div class="field"><label>نمونه کار</label><div class="file-drop">فایل نمونه کار یا لینک را اینجا آپلود کنید (کلیک کنید)</div></div>
-    <p id="mrMsg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
-    <button class="btn btn-primary btn-block" id="mrBtn" onclick="submitMembership()">ارسال درخواست</button>
-  </div>
-</div></section><footer class="site">
+<section><div class="wrap"><div class="grid-4" id="galleryList">
+  <p style="color:var(--text-2); text-align:center; grid-column:1/-1;">در حال بارگذاری تصاویر...</p>
+</div></div></section><footer class="site">
   <div class="wrap">
     <div class="footer-grid">
       <div>
@@ -349,122 +335,12 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
         <p style="color:var(--text-1); font-size:13.5px; line-height:1.9; max-width:280px;">پلتفرم توسعه نرم‌افزار، آموزش و مدیریت پروژه — از ایده تا اجرا با قدرت برنامه‌نویسی.</p>
       </div>
       <div><h5>دسترسی سریع</h5><ul><li><a href="index.html">خانه</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="team.html">تیم</a></li></ul></div>
-      <div><h5>پشتیبانی</h5><ul><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li><li><a href="../user-panel/support-ticket.html">تیکت پشتیبانی</a></li></ul></div>
+      <div><h5>پشتیبانی</h5><ul><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="contact.html">تماس با ما</a></li><li><a href="../user-panel/support-ticket.html">تیکت پشتیبانی</a></li></ul></div>
       <div><h5>حساب کاربری</h5><ul><li><a href="auth.html">ورود</a></li><li><a href="auth.html">ثبت‌نام</a></li><li><a href="../user-panel/dashboard.html">داشبورد</a></li></ul></div>
     </div>
     <div class="footer-bottom">© ۱۴۰۴ Elmore Stadium — تمامی حقوق محفوظ است. <span style="color:var(--text-2); opacity:.7;" dir="ltr">| Created by Morteza &amp; Elena</span></div>
   </div>
 </footer>
-<script>
-// اتصال به Supabase — این فایل در همه صفحات مشترک است
-const SUPABASE_URL = "https://njbztdhroxxlaqgjedek.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_EmnowD_Fn5MCoUSfTqbIfQ_am__8IAB";
-
-// supabase-js از CDN لود می‌شود (نگاه کنید به تگ script در هر صفحه)
-const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-</script>
-<script>
-// توابع کمکی احراز هویت — روی sb (کلاینت Supabase) کار می‌کند
-
-// ثبت‌نام کاربر جدید
-async function elmoreSignUp(fullName, phone, email, password) {
-  const { data, error } = await sb.auth.signUp({ email, password });
-  if (error) return { error };
-
-  // اگر ثبت‌نام موفق بود، پروفایل تکمیلی را هم بسازیم
-  if (data.user) {
-    await sb.from("profiles").insert({
-      id: data.user.id,
-      full_name: fullName,
-      phone: phone,
-    });
-  }
-  return { data };
-}
-
-// ورود کاربر
-async function elmoreSignIn(email, password) {
-  const { data, error } = await sb.auth.signInWithPassword({ email, password });
-  return { data, error };
-}
-
-// خروج کاربر
-async function elmoreSignOut(redirectUrl) {
-  await sb.auth.signOut();
-  window.location.href = redirectUrl || "../public/auth.html";
-}
-
-// گرفتن کاربر فعلی (یا null)
-async function elmoreGetUser() {
-  const { data } = await sb.auth.getUser();
-  return data.user || null;
-}
-
-// محافظت از صفحات پنل کاربری: اگر لاگین نبود، به صفحه ورود می‌فرستد
-async function elmoreRequireAuth(loginPageUrl) {
-  const user = await elmoreGetUser();
-  if (!user) {
-    window.location.href = loginPageUrl || "../public/auth.html";
-    return null;
-  }
-  return user;
-}
-
-// نمایش نام کاربر در بالای پنل (اگر عنصر user-chip-name وجود داشته باشد)
-async function elmoreShowUserName() {
-  const user = await elmoreGetUser();
-  if (!user) return;
-  const { data: profile } = await sb.from("profiles").select("full_name").eq("id", user.id).single();
-  const nameEl = document.getElementById("userChipName");
-  if (nameEl) nameEl.textContent = (profile && profile.full_name) || user.email;
-  const avEl = document.getElementById("userChipAvatar");
-  if (avEl) {
-    const initial = ((profile && profile.full_name) || user.email || "?").trim().charAt(0);
-    avEl.textContent = initial;
-  }
-}
-
-// نمایش پیام خطا/موفقیت ساده زیر فرم‌ها
-function elmoreShowMessage(elementId, message, isError) {
-  const el = document.getElementById(elementId);
-  if (!el) return;
-  el.textContent = message;
-  el.style.display = "block";
-  el.style.color = isError ? "#f87171" : "#4ade80";
-}
-
-</script>
-<script>
-async function submitMembership(){
-  const user = await elmoreGetUser();
-  if(!user){
-    elmoreShowMessage('mrMsg', 'برای ارسال درخواست، اول باید وارد حساب خود شوید. در حال انتقال...', true);
-    setTimeout(()=>{ window.location.href = 'auth.html'; }, 1500);
-    return;
-  }
-  const firstName = document.getElementById('mrFirstName').value.trim();
-  const lastName = document.getElementById('mrLastName').value.trim();
-  const age = document.getElementById('mrAge').value.trim();
-  const phone = document.getElementById('mrPhone').value.trim();
-  const specialty = document.getElementById('mrSpecialty').value;
-  const desc = document.getElementById('mrDesc').value.trim();
-
-  if(!firstName || !lastName || !phone){ elmoreShowMessage('mrMsg', 'لطفاً نام، نام خانوادگی و شماره تماس را وارد کنید', true); return; }
-
-  const fullDescription = `نام: ${firstName} ${lastName} | سن: ${age || '-'} | تماس: ${phone}\n${desc}`;
-
-  const btn = document.getElementById('mrBtn');
-  btn.textContent = 'در حال ارسال...'; btn.disabled = true;
-  const { error } = await sb.from('membership_requests').insert({
-    user_id: user.id, specialty, description: fullDescription, status: 'در انتظار بررسی'
-  });
-  btn.textContent = 'ارسال درخواست'; btn.disabled = false;
-
-  if(error){ elmoreShowMessage('mrMsg', 'خطا: ' + error.message, true); return; }
-  elmoreShowMessage('mrMsg', 'درخواست شما ثبت شد! وضعیتش رو می‌تونی از پنل کاربری، بخش «درخواست عضویت» ببینی. تیم ما به‌زودی بررسی می‌کند.', false);
-}
-</script>
 
 <script>
 window.addEventListener('load', function(){
@@ -481,6 +357,9 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 <script>
+const SUPABASE_URL = "https://njbztdhroxxlaqgjedek.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_EmnowD_Fn5MCoUSfTqbIfQ_am__8IAB";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 (async function(){
   const { data } = await sb.auth.getUser();
   const btn = document.getElementById('navAuthBtn');
@@ -489,6 +368,22 @@ document.addEventListener('DOMContentLoaded', function(){
     btn.href = '../user-panel/dashboard.html';
   }
 })();
+
+async function loadGalleryList(){
+  const { data, error } = await sb.from('gallery_images').select('*').order('created_at', { ascending: false });
+  const el = document.getElementById('galleryList');
+  if(error || !data || data.length === 0){
+    el.innerHTML = '<p style="color:var(--text-2); text-align:center; grid-column:1/-1;">فعلاً تصویری در گالری ثبت نشده.</p>';
+    return;
+  }
+  el.innerHTML = data.map(function(img){
+    return `<div class="card glass glass-hover" style="padding:10px;">
+      <img src="${img.image_url}" style="width:100%; height:150px; object-fit:cover; border-radius:10px;">
+      <p style="font-size:12.5px; margin-top:8px; text-align:center;">${img.caption||''}</p>
+    </div>`;
+  }).join('');
+}
+loadGalleryList();
 </script>
 
 <script>
