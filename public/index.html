@@ -480,11 +480,18 @@ function showProjectDownloadMsg(btn){
 </footer>
 <script>
 // حذف لودینگ اسکرین بعد از لود کامل صفحه
-window.addEventListener('load', function(){
-  setTimeout(function(){
-    document.getElementById('loadingScreen').classList.add('hide');
-  }, 500);
-});
+(function(){
+  var elmoreLoadingHidden = false;
+  function elmoreHideLoadingScreen(){
+    if(elmoreLoadingHidden) return;
+    elmoreLoadingHidden = true;
+    var el = document.getElementById('loadingScreen');
+    if(el) el.classList.add('hide');
+  }
+  window.addEventListener('load', function(){ setTimeout(elmoreHideLoadingScreen, 500); });
+  // فیل‌سیف: اگر منابع خارجی (مثل CDN) کند یا مسدود باشند، صفحه را برای همیشه پشت اسپلش‌اسکرین نگه ندار
+  setTimeout(elmoreHideLoadingScreen, 6000);
+})();
 
 // انیمیشن ظاهرشدن هنگام اسکرول
 const revealObserver = new IntersectionObserver((entries) => {
@@ -532,7 +539,7 @@ async function loadComments(){
   }
   grid.innerHTML = data.map(function(c){
     const initial = (c.name || 'کاربر').trim().charAt(0);
-    return `<div class="card glass glass-hover" data-reveal>
+    return `<div class="card glass glass-hover">
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
         <div class="card-icon" style="width:38px;height:38px;">${initial}</div>
         <strong style="font-size:13.5px;">${c.name || 'کاربر'}</strong>
