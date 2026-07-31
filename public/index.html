@@ -338,7 +338,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
     <div class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</div>
-    <nav class="main-nav"><ul><li><a href="index.html" class="active">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
+    <nav class="main-nav"><ul><li><a href="index.html" class="active">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
       <a href="auth.html" class="btn btn-ghost" id="navAuthBtn">ورود / ثبت‌نام</a>
       <a href="project-order.html" class="btn btn-primary">شروع پروژه</a>
@@ -472,7 +472,7 @@ function showProjectDownloadMsg(btn){
         <p style="color:var(--text-1); font-size:13.5px; line-height:1.9; max-width:280px;">پلتفرم توسعه نرم‌افزار، آموزش و مدیریت پروژه — از ایده تا اجرا با قدرت برنامه‌نویسی.</p>
       </div>
       <div><h5>دسترسی سریع</h5><ul><li><a href="index.html">خانه</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="team.html">تیم</a></li></ul></div>
-      <div><h5>پشتیبانی</h5><ul><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="contact.html">تماس با ما</a></li><li><a href="../user-panel/support-ticket.html">تیکت پشتیبانی</a></li></ul></div>
+      <div><h5>پشتیبانی</h5><ul><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li><li><a href="../user-panel/support-ticket.html">تیکت پشتیبانی</a></li></ul></div>
       <div><h5>حساب کاربری</h5><ul><li><a href="auth.html">ورود</a></li><li><a href="auth.html">ثبت‌نام</a></li><li><a href="../user-panel/dashboard.html">داشبورد</a></li></ul></div>
     </div>
     <div class="footer-bottom">© ۱۴۰۴ Elmore Stadium — تمامی حقوق محفوظ است. <span style="color:var(--text-2); opacity:.7;" dir="ltr">| Created by Morteza &amp; Elena</span></div>
@@ -480,18 +480,11 @@ function showProjectDownloadMsg(btn){
 </footer>
 <script>
 // حذف لودینگ اسکرین بعد از لود کامل صفحه
-(function(){
-  var elmoreLoadingHidden = false;
-  function elmoreHideLoadingScreen(){
-    if(elmoreLoadingHidden) return;
-    elmoreLoadingHidden = true;
-    var el = document.getElementById('loadingScreen');
-    if(el) el.classList.add('hide');
-  }
-  window.addEventListener('load', function(){ setTimeout(elmoreHideLoadingScreen, 500); });
-  // فیل‌سیف: اگر منابع خارجی (مثل CDN) کند یا مسدود باشند، صفحه را برای همیشه پشت اسپلش‌اسکرین نگه ندار
-  setTimeout(elmoreHideLoadingScreen, 6000);
-})();
+window.addEventListener('load', function(){
+  setTimeout(function(){
+    document.getElementById('loadingScreen').classList.add('hide');
+  }, 500);
+});
 
 // انیمیشن ظاهرشدن هنگام اسکرول
 const revealObserver = new IntersectionObserver((entries) => {
@@ -539,7 +532,7 @@ async function loadComments(){
   }
   grid.innerHTML = data.map(function(c){
     const initial = (c.name || 'کاربر').trim().charAt(0);
-    return `<div class="card glass glass-hover">
+    return `<div class="card glass glass-hover" data-reveal>
       <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
         <div class="card-icon" style="width:38px;height:38px;">${initial}</div>
         <strong style="font-size:13.5px;">${c.name || 'کاربر'}</strong>
