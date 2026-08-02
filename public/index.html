@@ -3,11 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#a855f7">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
+<script src="/assets/js/pwa.js" defer></script>
 <title>خانه | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
+.mini-spinner{ display:inline-block; width:15px; height:15px; border:2px solid rgba(168,85,247,.25); border-top-color:var(--purple, #a855f7); border-radius:50%; animation:mini-spin .7s linear infinite; vertical-align:-3px; margin-left:8px;}
+@keyframes mini-spin{ to{ transform:rotate(360deg); } }
+
 /* =========================================================
    Elmore Stadium — Shared Stylesheet
    Design tokens: dark / glassmorphism / neon purple / aurora
@@ -406,8 +415,8 @@ stadium.<span class="c-fn">deploy</span>();
     <div class="section-head" data-reveal><div class="section-eyebrow">نمونه‌کارها</div><h2 class="section-title">پروژه‌های ما</h2></div>
     <div class="grid-3">
       <div class="card glass glass-hover" data-reveal><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/kids-english-app.jpg" alt="آموزش زبان انگلیسی کودکان" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش زبان انگلیسی کودکان</h3><p>اپلیکیشنی برای آموزش کامل زبان انگلیسی به کودکان با استفاده از کارت‌عکس و فیلم‌های آموزشی حروف.</p><div class="tag-row"><span class="tag">اپلیکیشن آموزشی</span><span class="tag">کودکان</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/website-builder-course.png" alt="آموزش ساخت سایت" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش ساخت سایت</h3><p>آموزش مبتدی تا حرفه‌ای ساخت سایت با استفاده از سایت‌ساز گوگل، مخصوص شروع از صفر.</p><div class="tag-row"><span class="tag">آموزش</span><span class="tag">سایت‌ساز گوگل</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/freefire-tutorial-app.png" alt="آموزش فری فایر" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش فری فایر</h3><p>معرفی کامل بخش‌های مختلف بازی فری‌فایر تا با آموزش کاربرد هر بخش، راحت‌تر و بهتر بازی کنید.</p><div class="tag-row"><span class="tag">آموزش</span><span class="tag">بازی</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/website-builder-course.jpg" alt="آموزش ساخت سایت" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش ساخت سایت</h3><p>آموزش مبتدی تا حرفه‌ای ساخت سایت با استفاده از سایت‌ساز گوگل، مخصوص شروع از صفر.</p><div class="tag-row"><span class="tag">آموزش</span><span class="tag">سایت‌ساز گوگل</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/freefire-tutorial-app.jpg" alt="آموزش فری فایر" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش فری فایر</h3><p>معرفی کامل بخش‌های مختلف بازی فری‌فایر تا با آموزش کاربرد هر بخش، راحت‌تر و بهتر بازی کنید.</p><div class="tag-row"><span class="tag">آموزش</span><span class="tag">بازی</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
     </div>
     <div style="text-align:center; margin-top:30px;"><a href="projects.html" class="btn btn-ghost">مشاهده همه پروژه‌ها</a></div>
   </div>
@@ -444,7 +453,7 @@ function showProjectDownloadMsg(btn){
   <div class="wrap">
     <div class="section-head" data-reveal><div class="section-eyebrow">نظرات شما</div><h2 class="section-title">کاربران درباره ما چه می‌گویند</h2></div>
     <div class="review-grid grid-3" id="commentsGrid">
-      <p style="color:var(--text-2); text-align:center; grid-column:1/-1;">در حال بارگذاری نظرات...</p>
+      <p style="color:var(--text-2); text-align:center; grid-column:1/-1;"><span class="mini-spinner"></span>در حال بارگذاری نظرات...</p>
     </div>
     <div class="panel glass" style="max-width:560px; margin:36px auto 0;" data-reveal>
       <div class="panel-head"><h3>نظر خودتان را ثبت کنید</h3></div>
@@ -497,6 +506,21 @@ const revealObserver = new IntersectionObserver((entries) => {
 }, { threshold: 0.15 });
 
 document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
+
+// المان‌هایی که بعداً و به‌صورت داینامیک اضافه می‌شن (مثلاً کارت‌های نظرات، دوره‌ها یا هر
+// لیستی که بعد از دریافت داده از Supabase ساخته می‌شه) هم باید توسط observer دیده بشن،
+// وگرنه چون در لحظه‌ی بارگذاری اولیه‌ی صفحه وجود نداشتن، هیچ‌وقت observe نمی‌شدن و برای
+// همیشه opacity:0 (نامرئی) می‌موندن. این mutation observer این مشکل رو حل می‌کنه.
+const revealMutationObserver = new MutationObserver(function(mutations){
+  mutations.forEach(function(mutation){
+    mutation.addedNodes.forEach(function(node){
+      if(node.nodeType !== 1) return;
+      if(node.matches && node.matches('[data-reveal]')) revealObserver.observe(node);
+      if(node.querySelectorAll) node.querySelectorAll('[data-reveal]').forEach(function(el){ revealObserver.observe(el); });
+    });
+  });
+});
+revealMutationObserver.observe(document.body, { childList: true, subtree: true });
 </script>
 <script>
 // اتصال به Supabase — این فایل در همه صفحات مشترک است
