@@ -3,10 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#a855f7">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/icons/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16.png">
+<link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
+<script src="/assets/js/pwa.js" defer></script>
 <title>گفتگوی تیکت | Elmore Stadium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+.mini-spinner{ display:inline-block; width:15px; height:15px; border:2px solid rgba(168,85,247,.25); border-top-color:var(--purple, #a855f7); border-radius:50%; animation:mini-spin .7s linear infinite; vertical-align:-3px; margin-left:8px;}
+@keyframes mini-spin{ to{ transform:rotate(360deg); } }
+
 /* =========================================================
    Elmore Stadium — Shared Stylesheet
    Design tokens: dark / glassmorphism / neon purple / aurora
@@ -298,7 +307,10 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 </style>
 </head>
 <body>
-<div id="loadingScreen">\n  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">\n  <div class="loader-bar"></div>\n</div>\n
+<div id="loadingScreen">
+  <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">
+  <div class="loader-bar"></div>
+</div>
 <div class="aurora"></div>
 <div class="grid-overlay"></div>
 <div class="layout">
@@ -337,11 +349,11 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <div class="top-actions">
         <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
-        <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName">در حال بارگذاری...</span></div>
+        <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName"><span class="mini-spinner"></span>در حال بارگذاری...</span></div>
       </div>
     </div>
 <div class="panel glass" data-reveal data-reveal-delay="1">
-  <div id="chatContent"><p style="color:var(--text-2);">در حال بارگذاری...</p></div>
+  <div id="chatContent"><p style="color:var(--text-2);"><span class="mini-spinner"></span>در حال بارگذاری...</p></div>
 </div>
 </main>
 </div>
@@ -559,6 +571,21 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }, { threshold: 0.12 });
   document.querySelectorAll('[data-reveal]').forEach(function(el){ revealObserver.observe(el); });
+
+// المان‌هایی که بعداً و به‌صورت داینامیک اضافه می‌شن (مثلاً کارت‌های نظرات، دوره‌ها یا هر
+// لیستی که بعد از دریافت داده از Supabase ساخته می‌شه) هم باید توسط observer دیده بشن،
+// وگرنه چون در لحظه‌ی بارگذاری اولیه‌ی صفحه وجود نداشتن، هیچ‌وقت observe نمی‌شدن و برای
+// همیشه opacity:0 (نامرئی) می‌موندن. این mutation observer این مشکل رو حل می‌کنه.
+const revealMutationObserver = new MutationObserver(function(mutations){
+  mutations.forEach(function(mutation){
+    mutation.addedNodes.forEach(function(node){
+      if(node.nodeType !== 1) return;
+      if(node.matches && node.matches('[data-reveal]')) revealObserver.observe(node);
+      if(node.querySelectorAll) node.querySelectorAll('[data-reveal]').forEach(function(el){ revealObserver.observe(el); });
+    });
+  });
+});
+revealMutationObserver.observe(document.body, { childList: true, subtree: true });
 });
 </script>
 
