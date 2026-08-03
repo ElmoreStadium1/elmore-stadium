@@ -323,7 +323,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> داشبورد</a>
 
     <div class="nav-divider">مدیریت محتوا</div>
-    <a class="nav-item" href="users.html"><span class="nav-icon">👥</span> کاربران</a>
+    <a class="nav-item" href="users.html" data-super-admin-only><span class="nav-icon">👥</span> کاربران</a>
 <a class="nav-item" href="team.html"><span class="nav-icon">🧑‍💼</span> اعضای تیم</a>
 <a class="nav-item" href="projects.html"><span class="nav-icon">📁</span> پروژه‌ها</a>
 <a class="nav-item" href="courses.html"><span class="nav-icon">🎓</span> دوره‌ها</a>
@@ -433,6 +433,9 @@ async function elmoreRequireAdmin(loginPageUrl) {
     window.location.href = "../public/index.html";
     return null;
   }
+  // فقط ایمیل مدیر اصلی (مرتضی) دسترسی کامل super-admin داره؛ این برای محدودکردن بخش‌هایی
+  // مثل «کاربران» استفاده می‌شه که فقط مدیر اصلی باید بهش دسترسی داشته باشه
+  window.isSuperAdmin = (user.email === "elmorestadium@gmail.com");
   return user;
 }
 
@@ -463,7 +466,12 @@ function elmoreShowMessage(elementId, message, isError) {
 <script>
 (async function(){
   const adminUser = await elmoreRequireAdmin('../public/auth.html');
-  if(adminUser){ elmoreShowUserName(); if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); } }
+  if(adminUser){
+    elmoreShowUserName();
+    // مخفی‌کردن بخش‌هایی از پنل که فقط مخصوص مدیر اصلی هستن (مثل لینک «کاربران») برای بقیه‌ی ادمین‌ها
+    document.querySelectorAll('[data-super-admin-only]').forEach(function(el){ if(!window.isSuperAdmin) el.remove(); });
+    if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); }
+  }
 })();
 </script>
 <script>

@@ -323,7 +323,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> داشبورد</a>
 
     <div class="nav-divider">مدیریت محتوا</div>
-    <a class="nav-item" href="users.html"><span class="nav-icon">👥</span> کاربران</a>
+    <a class="nav-item" href="users.html" data-super-admin-only><span class="nav-icon">👥</span> کاربران</a>
 <a class="nav-item active" href="team.html"><span class="nav-icon">🧑‍💼</span> اعضای تیم</a>
 <a class="nav-item" href="projects.html"><span class="nav-icon">📁</span> پروژه‌ها</a>
 <a class="nav-item" href="courses.html"><span class="nav-icon">🎓</span> دوره‌ها</a>
@@ -354,8 +354,8 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       </div>
     </div><div class="panel glass" data-reveal data-reveal-delay="1">
     <div class="panel-head"><h3>اعضای تیم</h3></div>
-    <table><thead><tr><th>نام</th><th>سمت</th><th>مهارت‌ها</th><th>تلگرام</th></tr></thead><tbody><tr><td><div class='u-cell'><div class='u-av'>م.ب</div><strong>مرتضی براتی</strong></div></td><td>مدیر تیم و برنامه‌نویس</td><td>Python, HTML</td><td>@ElmoreStadium</td></tr><tr><td><div class='u-cell'><div class='u-av'>ن.ا</div><strong>النا ابراهیم‌پور</strong></div></td><td>مدیر تیم و برنامه‌نویس وب‌سایت‌ساز</td><td>HTML, CSS</td><td>@Elle_2o2</td></tr><tr><td><div class='u-cell'><div class='u-av'>ز.ک</div><strong>زینب کریم‌زاده ثانی</strong></div></td><td>گرافیست و طراح</td><td>Photoshop, Adobe</td><td>@Zeynab_a86</td></tr></tbody></table>
-    <p style="margin-top:16px; font-size:12.5px; color:var(--text-2);">ℹ️ این بخش فعلاً فقط نمایشیه و مطابق اطلاعات واقعی صفحه‌ی «تیم» سایته. برای تغییر عکس یا اطلاعات اعضا، باید مستقیم فایل <code>public/team.html</code> ویرایش بشه (چون این ۳ نفر به‌ندرت تغییر می‌کنن، وصل کردنش به دیتابیس فعلاً ضرورتی نداره).</p>
+    <table><thead><tr><th>نام</th><th>سمت</th><th>مهارت‌ها</th><th>تلگرام</th></tr></thead><tbody><tr><td><div class='u-cell'><div class='u-av'>م.ب</div><strong>مرتضی براتی</strong></div></td><td>مدیر تیم و برنامه‌نویس</td><td>Python, HTML</td><td>@ElmoreStadium</td></tr><tr><td><div class='u-cell'><div class='u-av'>ن.ا</div><strong>النا ابراهیم‌پور</strong></div></td><td>مدیر تیم و برنامه‌نویس وب‌سایت‌ساز</td><td>HTML, CSS</td><td>@Elle_2o2</td></tr><tr><td><div class='u-cell'><div class='u-av'>ز.ک</div><strong>زینب کریم‌زاده ثانی</strong></div></td><td>گرافیست و طراح</td><td>Photoshop, Adobe</td><td>@Zeynab_a86</td></tr><tr><td><div class='u-cell'><div class='u-av'>د.ج</div><strong>داریو جهانپور</strong></div></td><td>طراح وبسایت WordPress</td><td>WordPress, SEO</td><td>@Old_Dari0ArEna</td></tr><tr><td><div class='u-cell'><div class='u-av'>ا.م</div><strong>اسما محمدزاده</strong></div></td><td>ایده‌پرداز</td><td>UI/UX, Idea Generator</td><td>@Mooooon51</td></tr></tbody></table>
+    <p style="margin-top:16px; font-size:12.5px; color:var(--text-2);">ℹ️ این بخش فعلاً فقط نمایشیه و مطابق اطلاعات واقعی صفحه‌ی «تیم» سایته. برای تغییر عکس یا اطلاعات اعضا، باید مستقیم فایل <code>public/team.html</code> ویرایش بشه (چون این ۵ نفر به‌ندرت تغییر می‌کنن، وصل کردنش به دیتابیس فعلاً ضرورتی نداره).</p>
   </div>
 </main>
 </div>
@@ -430,6 +430,9 @@ async function elmoreRequireAdmin(loginPageUrl) {
     window.location.href = "../public/index.html";
     return null;
   }
+  // فقط ایمیل مدیر اصلی (مرتضی) دسترسی کامل super-admin داره؛ این برای محدودکردن بخش‌هایی
+  // مثل «کاربران» استفاده می‌شه که فقط مدیر اصلی باید بهش دسترسی داشته باشه
+  window.isSuperAdmin = (user.email === "elmorestadium@gmail.com");
   return user;
 }
 
@@ -460,7 +463,12 @@ function elmoreShowMessage(elementId, message, isError) {
 <script>
 (async function(){
   const adminUser = await elmoreRequireAdmin('../public/auth.html');
-  if(adminUser){ elmoreShowUserName(); if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); } }
+  if(adminUser){
+    elmoreShowUserName();
+    // مخفی‌کردن بخش‌هایی از پنل که فقط مخصوص مدیر اصلی هستن (مثل لینک «کاربران») برای بقیه‌ی ادمین‌ها
+    document.querySelectorAll('[data-super-admin-only]').forEach(function(el){ if(!window.isSuperAdmin) el.remove(); });
+    if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); }
+  }
 })();
 </script>
 
