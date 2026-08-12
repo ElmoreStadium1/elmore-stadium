@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /public/
+Disallow: /user-panel/
+Disallow: /admin-panel/
+
+Sitemap: https://elmorestadium.ir/sitemap.xml
