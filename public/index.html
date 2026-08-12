@@ -9,9 +9,34 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16.png">
 <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
 <script src="/assets/js/pwa.js" defer></script>
-<title>خانه | Elmore Stadium</title>
+<title>Elmore Stadium | توسعه نرم‌افزار، آموزش برنامه‌نویسی و مدیریت پروژه</title>
+<meta name="description" content="Elmore Stadium پلتفرم توسعه نرم‌افزار، آموزش عملی برنامه‌نویسی و مدیریت پروژه است — از ایده تا اجرا با تیمی متخصص در طراحی وب‌سایت، اپلیکیشن موبایل و هوش مصنوعی.">
+<link rel="canonical" href="https://elmorestadium.ir/public/index.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Elmore Stadium | توسعه نرم‌افزار و آموزش برنامه‌نویسی">
+<meta property="og:description" content="از ایده تا اجرا با قدرت برنامه‌نویسی — سفارش پروژه، دوره‌های عملی و تیم متخصص Elmore Stadium.">
+<meta property="og:url" content="https://elmorestadium.ir/public/index.html">
+<meta property="og:image" content="https://elmorestadium.ir/assets/images/logo.jpg">
+<meta property="og:locale" content="fa_IR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Elmore Stadium | توسعه نرم‌افزار و آموزش برنامه‌نویسی">
+<meta name="twitter:description" content="از ایده تا اجرا با قدرت برنامه‌نویسی — سفارش پروژه، دوره‌های عملی و تیم متخصص Elmore Stadium.">
+<meta name="twitter:image" content="https://elmorestadium.ir/assets/images/logo.jpg">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Elmore Stadium",
+  "url": "https://elmorestadium.ir",
+  "logo": "https://elmorestadium.ir/assets/images/logo.jpg",
+  "description": "پلتفرم توسعه نرم‌افزار، آموزش برنامه‌نویسی و مدیریت پروژه",
+  "email": "elmorestadium@gmail.com",
+  "address": { "@type": "PostalAddress", "addressLocality": "یزد", "addressCountry": "IR" }
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/design-system.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 .mini-spinner{ display:inline-block; width:15px; height:15px; border:2px solid rgba(168,85,247,.25); border-top-color:var(--purple, #a855f7); border-radius:50%; animation:mini-spin .7s linear infinite; vertical-align:-3px; margin-left:8px;}
@@ -26,13 +51,36 @@
   --glass:rgba(255,255,255,0.04); --glass-brd:rgba(255,255,255,0.08);
   --purple:#a855f7; --purple-2:#7c3aed; --violet-glow:#c084fc; --cyan:#22d3ee;
   --text-0:#f4f1fb; --text-1:#b6aec9; --text-2:#7a7290;
+  --scrollbar-thumb: var(--purple);
 }
+body.light-theme{
+  --bg-0:#f7f5fb; --bg-1:#efeaf7; --bg-2:#e8e1f5;
+  --glass:rgba(20,10,40,0.035); --glass-brd:rgba(20,10,40,0.09);
+  --purple:#9333ea; --purple-2:#7c3aed; --violet-glow:#8b30e0; --cyan:#0891b2;
+  --text-0:#1a1030; --text-1:#4b4160; --text-2:#7a7290;
+}
+body.light-theme .grid-overlay, body.light-theme .aurora{ opacity:.4;}
+.theme-switch{ width:46px; height:26px; border-radius:99px; background:var(--glass); border:1px solid var(--glass-brd); position:relative; cursor:pointer; display:flex; align-items:center; padding:2px; flex-shrink:0;}
+.theme-knob{ width:20px; height:20px; border-radius:50%; background:linear-gradient(135deg,var(--purple),var(--purple-2)); display:flex; align-items:center; justify-content:center; font-size:11px; transition:transform .3s ease; transform:translateX(0);}
+body.light-theme .theme-knob{ transform:translateX(-20px); background:linear-gradient(135deg,#fbbf24,#f59e0b);}
+.sound-toggle-btn{ width:36px; height:36px; border-radius:50%; background:var(--glass); border:1px solid var(--glass-brd); display:flex; align-items:center; justify-content:center; cursor:pointer;}
+.sound-bars{ display:flex; gap:2px; align-items:flex-end; height:12px;}
+.sound-bars span{ width:2.5px; background:var(--cyan); border-radius:1px; animation:soundBarAnim .9s ease-in-out infinite;}
+.sound-bars span:nth-child(1){ height:40%; }
+.sound-bars span:nth-child(2){ height:100%; animation-delay:.2s;}
+.sound-bars span:nth-child(3){ height:65%; animation-delay:.4s;}
+@keyframes soundBarAnim{ 0%,100%{ transform:scaleY(.4);} 50%{ transform:scaleY(1);} }
+.sound-toggle-btn.muted .sound-bars span{ animation-play-state:paused; opacity:.35; transform:scaleY(.3) !important;}
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body{
   background:var(--bg-0); color:var(--text-0);
   font-family:'Vazirmatn', sans-serif; min-height:100vh;
   position:relative; overflow-x:hidden;
+}
+@media(min-width:901px) and (pointer:fine){
+  body{ cursor:none; }
+  input, textarea, select{ cursor:auto; }
 }
 .mono{ font-family:'JetBrains Mono', monospace; }
 a{ color:inherit; }
@@ -352,6 +400,23 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 #backToTop:hover{ background:var(--purple, #a855f7);}
 @media(max-width:640px){ #backToTop{ bottom:16px; left:16px; width:42px; height:42px;} }
 
+/* ---- افکت‌های جدید ---- */
+#customCursor{ position:fixed; top:0; left:0; width:20px; height:20px; border:2px solid var(--purple); border-radius:50%; pointer-events:none; z-index:999; transform:translate(-50%,-50%); transition:width .2s,height .2s,background .2s; mix-blend-mode:difference; }
+#customCursor.grow{ width:44px; height:44px; background:rgba(168,85,247,.22); }
+#pageTransitionOverlay{ position:fixed; inset:0; background:linear-gradient(135deg,var(--purple-2),var(--purple)); z-index:998; transform:scaleY(0); transform-origin:bottom; transition:transform .5s cubic-bezier(.76,0,.24,1); pointer-events:none;}
+#pageTransitionOverlay.active{ transform:scaleY(1); }
+.logo-mark{ transition:transform .15s ease; }
+.marquee-wrap{ overflow:hidden; -webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent); mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+.marquee-track{ display:flex; gap:56px; white-space:nowrap; width:max-content; animation:marqueeScroll 20s linear infinite;}
+.marquee-track span{ font-size:19px; font-weight:700; color:var(--text-2); opacity:.75;}
+@keyframes marqueeScroll{ from{ transform:translateX(0);} to{ transform:translateX(-50%);} }
+@media(prefers-reduced-motion: reduce){ .marquee-track{ animation:none;} }
+.bento-projects{ display:grid; grid-template-columns:1.35fr 1fr; grid-template-rows:repeat(2,auto); gap:22px;}
+.bento-p1{ grid-row:span 2; display:flex; flex-direction:column; justify-content:center;}
+@media(max-width:900px){ .bento-projects{ grid-template-columns:1fr;} .bento-p1{ grid-row:span 1;} }
+@media(max-width:900px){ #customCursor{ display:none;} body{ cursor:auto !important;} }
+@media(pointer:coarse){ #customCursor{ display:none;} }
+
 /* Responsive */
 @media(max-width:960px){
   .mobile-nav-toggle{ display:flex;}
@@ -389,15 +454,21 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <canvas id="particleCanvas"></canvas>
 <div id="cursorGlow"></div>
 <div id="scrollProgress"></div>
+<div id="customCursor"></div>
+<div id="pageTransitionOverlay"></div>
 <header class="site">
   <div class="wrap nav-inner">
-    <a href="index.html" class="logo">
+    <a href="index.html" class="logo" id="siteLogo">
       <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
     <div class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</div>
     <nav class="main-nav"><ul><li><a href="index.html" class="active">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
+      <button class="sound-toggle-btn muted" id="ambientSoundBtn" title="صدای محیطی">
+        <span class="sound-bars"><span></span><span></span><span></span></span>
+      </button>
+      <div class="theme-switch" id="themeSwitch" onclick="toggleSiteTheme()" title="تغییر حالت روز/شب"><div class="theme-knob">🌙</div></div>
       <a href="auth.html" class="btn btn-ghost" id="navAuthBtn">ورود / ثبت‌نام</a>
       <a href="project-order.html" class="btn btn-primary">شروع پروژه</a>
     </div>
@@ -438,6 +509,15 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </div>
 </section>
 
+<section style="padding:26px 0;">
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <span>⚛️ React</span><span>▲ Next.js</span><span>🐍 Python</span><span>🟢 Node.js</span><span>💎 Prisma</span><span>📘 TypeScript</span><span>🎨 Figma</span><span>🔥 Firebase</span>
+      <span>⚛️ React</span><span>▲ Next.js</span><span>🐍 Python</span><span>🟢 Node.js</span><span>💎 Prisma</span><span>📘 TypeScript</span><span>🎨 Figma</span><span>🔥 Firebase</span>
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="section-head" data-reveal><div class="section-eyebrow">خدمات ما</div><h2 class="section-title">هرچی برای ساخت محصول لازم داری</h2></div>
@@ -465,10 +545,10 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <section>
   <div class="wrap">
     <div class="section-head" data-reveal><div class="section-eyebrow">نمونه‌کارها</div><h2 class="section-title">پروژه‌های ما</h2></div>
-    <div class="grid-3">
-      <div class="card glass glass-hover" data-reveal><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/kids-english-app.jpg" alt="آموزش زبان انگلیسی کودکان" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش زبان انگلیسی کودکان</h3><p>اپلیکیشنی برای آموزش کامل زبان انگلیسی به کودکان با استفاده از کارت‌عکس و فیلم‌های آموزشی حروف.</p><div class="tag-row"><span class="tag">اپلیکیشن آموزشی</span><span class="tag">کودکان</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="1"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/website-builder-course.jpg" alt="آموزش ساخت سایت" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش ساخت سایت</h3><p>آموزش مبتدی تا حرفه‌ای ساخت سایت با استفاده از سایت‌ساز گوگل، مخصوص شروع از صفر.</p><div class="tag-row"><span class="tag">آموزش</span><span class="tag">سایت‌ساز گوگل</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
-      <div class="card glass glass-hover" data-reveal data-reveal-delay="2"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/freefire-tutorial-app.jpg" alt="آموزش فری فایر" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش فری فایر</h3><p>معرفی کامل بخش‌های مختلف بازی فری‌فایر تا با آموزش کاربرد هر بخش، راحت‌تر و بهتر بازی کنید.</p><div class="tag-row"><span class="tag">آموزش</span><span class="tag">بازی</span></div><button class="btn btn-ghost btn-block" style="margin-top:14px; font-size:13px; padding:9px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+    <div class="bento-projects">
+      <div class="card glass glass-hover bento-p1" data-reveal><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0; width:64px; height:64px;"><img src="../assets/images/projects/kids-english-app.jpg" alt="آموزش زبان انگلیسی کودکان" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3 style="font-size:19px; margin-top:14px;">آموزش زبان انگلیسی کودکان</h3><p>اپلیکیشنی برای آموزش کامل زبان انگلیسی به کودکان با استفاده از کارت‌عکس و فیلم‌های آموزشی حروف.</p><div class="tag-row"><span class="tag">اپلیکیشن آموزشی</span><span class="tag">کودکان</span></div><button class="btn btn-ghost" style="margin-top:16px; font-size:13px; padding:9px 18px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+      <div class="card glass glass-hover bento-p2" data-reveal data-reveal-delay="1"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/website-builder-course.jpg" alt="آموزش ساخت سایت" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش ساخت سایت</h3><p>آموزش مبتدی تا حرفه‌ای ساخت سایت با سایت‌ساز گوگل.</p><button class="btn btn-ghost btn-block" style="margin-top:12px; font-size:12.5px; padding:8px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
+      <div class="card glass glass-hover bento-p3" data-reveal data-reveal-delay="2"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/freefire-tutorial-app.jpg" alt="آموزش فری فایر" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش فری فایر</h3><p>معرفی کامل بخش‌های مختلف بازی فری‌فایر.</p><button class="btn btn-ghost btn-block" style="margin-top:12px; font-size:12.5px; padding:8px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
     </div>
     <div style="text-align:center; margin-top:30px;"><a href="projects.html" class="btn btn-ghost">مشاهده همه پروژه‌ها</a></div>
   </div>
@@ -699,6 +779,79 @@ async function loadActiveUsersCount(){
 loadActiveUsersCount();
 loadComments();
 
+// ---- حالت روز/شب ----
+(function(){
+  const saved = localStorage.getItem('elmore-theme');
+  if(saved === 'light') document.body.classList.add('light-theme');
+})();
+function toggleSiteTheme(){
+  document.body.classList.toggle('light-theme');
+  localStorage.setItem('elmore-theme', document.body.classList.contains('light-theme') ? 'light' : 'dark');
+}
+
+// ---- نشانگر موس سفارشی ----
+(function(){
+  if(window.innerWidth < 901) return;
+  const cursor = document.getElementById('customCursor');
+  if(!cursor) return;
+  document.addEventListener('mousemove', function(e){
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .btn, .glass-hover, input, textarea, select, .theme-switch').forEach(function(el){
+    el.addEventListener('mouseenter', function(){ cursor.classList.add('grow'); });
+    el.addEventListener('mouseleave', function(){ cursor.classList.remove('grow'); });
+  });
+})();
+
+// ---- ترانزیشن بین صفحات ----
+(function(){
+  const overlay = document.getElementById('pageTransitionOverlay');
+  if(!overlay) return;
+  document.querySelectorAll('a[href$=".html"]').forEach(function(link){
+    link.addEventListener('click', function(e){
+      const href = link.getAttribute('href');
+      if(link.target === '_blank' || href.startsWith('http')) return;
+      e.preventDefault();
+      overlay.classList.add('active');
+      setTimeout(function(){ window.location.href = href; }, 480);
+    });
+  });
+})();
+
+// ---- لوگوی مغناطیسی ----
+(function(){
+  const logo = document.getElementById('siteLogo');
+  if(!logo || window.innerWidth < 901) return;
+  const img = logo.querySelector('.logo-mark');
+  logo.addEventListener('mousemove', function(e){
+    const rect = logo.getBoundingClientRect();
+    const mx = (e.clientX - rect.left - rect.width/2) * 0.35;
+    const my = (e.clientY - rect.top - rect.height/2) * 0.35;
+    if(img) img.style.transform = 'translate(' + mx + 'px,' + my + 'px) rotate(' + (mx*0.4) + 'deg)';
+  });
+  logo.addEventListener('mouseleave', function(){ if(img) img.style.transform = ''; });
+})();
+
+// ---- صدای محیطی اختیاری ----
+(function(){
+  const btn = document.getElementById('ambientSoundBtn');
+  if(!btn) return;
+  let audio = null;
+  let playing = false;
+  btn.addEventListener('click', function(){
+    if(!audio){
+      audio = new Audio('../assets/audio/ambient.mp3');
+      audio.loop = true;
+      audio.volume = 0.25;
+    }
+    playing = !playing;
+    if(playing){ audio.play().catch(function(){}); btn.classList.remove('muted'); }
+    else { audio.pause(); btn.classList.add('muted'); }
+  });
+})();
+
+
 // ---- شمارنده‌ی متحرک آمار ----
 function runCountUp(el){
   const target = parseInt(el.getAttribute('data-countup'), 10) || 0;
@@ -852,7 +1005,79 @@ function toggleMobileNav(){
 }
 </script>
 <div id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="بازگشت به بالا">↑</div>
+
+<div class="cmdk-backdrop" id="cmdkBackdrop" onclick="closeCmdk(event)">
+  <div class="cmdk-box glass-strong" onclick="event.stopPropagation()">
+    <div class="cmdk-input-row">
+      <span>⌘</span>
+      <input type="text" id="cmdkInput" placeholder="جستجو در صفحات سایت... (خانه، پروژه‌ها، دوره‌ها...)" autocomplete="off">
+      <kbd>Esc</kbd>
+    </div>
+    <div class="cmdk-results" id="cmdkResults"></div>
+  </div>
+</div>
+<button class="cmdk-mobile-trigger" onclick="openCmdk()" title="جستجو">🔍</button>
 </body>
+
+<script>
+// ---- Command Palette (Ctrl+K) ----
+const cmdkItems = [
+  { label:'خانه', desc:'صفحه‌ی اصلی سایت', href:'index.html', icon:'🏠' },
+  { label:'پروژه‌ها', desc:'مشاهده نمونه‌کارها', href:'projects.html', icon:'📁' },
+  { label:'دوره‌ها', desc:'دوره‌های آموزشی', href:'courses.html', icon:'🎓' },
+  { label:'تیم', desc:'آشنایی با اعضای تیم', href:'team.html', icon:'👥' },
+  { label:'اخبار', desc:'آخرین اخبار', href:'news.html', icon:'📰' },
+  { label:'گالری', desc:'گالری تصاویر', href:'gallery.html', icon:'🖼️' },
+  { label:'سوالات متداول', desc:'پاسخ سوالات رایج', href:'faq.html', icon:'❓' },
+  { label:'تماس با ما', desc:'راه‌های ارتباطی', href:'contact.html', icon:'✉️' },
+  { label:'سفارش پروژه', desc:'ثبت سفارش جدید', href:'project-order.html', icon:'🧾' },
+  { label:'درخواست عضویت', desc:'پیوستن به تیم', href:'membership-request.html', icon:'📝' },
+  { label:'ورود / ثبت‌نام', desc:'حساب کاربری', href:'auth.html', icon:'🔑' },
+  { label:'داشبورد من', desc:'پنل کاربری', href:'../user-panel/dashboard.html', icon:'⚡' },
+];
+
+function renderCmdkResults(query){
+  const list = document.getElementById('cmdkResults');
+  const q = (query||'').trim().toLowerCase();
+  const filtered = q ? cmdkItems.filter(i => (i.label+i.desc).toLowerCase().includes(q)) : cmdkItems;
+  if(filtered.length === 0){
+    list.innerHTML = '<div class="cmdk-empty">نتیجه‌ای پیدا نشد</div>';
+    return;
+  }
+  list.innerHTML = filtered.map(function(i, idx){
+    return `<a href="${i.href}" class="cmdk-item ${idx===0?'active':''}"><span class="cmdk-item-icon">${i.icon}</span><div><strong>${i.label}</strong><span>${i.desc}</span></div></a>`;
+  }).join('');
+}
+
+function openCmdk(){
+  document.getElementById('cmdkBackdrop').classList.add('show');
+  document.getElementById('cmdkInput').value = '';
+  renderCmdkResults('');
+  setTimeout(()=>document.getElementById('cmdkInput').focus(), 50);
+}
+function closeCmdk(e){
+  if(e && e.target.id !== 'cmdkBackdrop') return;
+  document.getElementById('cmdkBackdrop').classList.remove('show');
+}
+document.addEventListener('keydown', function(e){
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){
+    e.preventDefault();
+    const backdrop = document.getElementById('cmdkBackdrop');
+    backdrop.classList.contains('show') ? closeCmdk({target:backdrop}) : openCmdk();
+  }
+  if(e.key === 'Escape') closeCmdk({target:document.getElementById('cmdkBackdrop')});
+});
+const cmdkInputEl = document.getElementById('cmdkInput');
+if(cmdkInputEl){
+  cmdkInputEl.addEventListener('input', function(){ renderCmdkResults(this.value); });
+  cmdkInputEl.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){
+      const first = document.querySelector('.cmdk-item');
+      if(first) window.location.href = first.getAttribute('href');
+    }
+  });
+}
+</script>
 
 <script>
 (function(){

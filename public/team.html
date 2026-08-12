@@ -9,9 +9,22 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16.png">
 <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
 <script src="/assets/js/pwa.js" defer></script>
-<title>تیم ما | Elmore Stadium</title>
+<title>آشنایی با تیم Elmore Stadium | برنامه‌نویسان و طراحان</title>
+<meta name="description" content="با اعضای تیم Elmore Stadium آشنا شوید — برنامه‌نویسان، طراحان و متخصصانی که پروژه‌ها و دوره‌های آموزشی را می‌سازند.">
+<link rel="canonical" href="https://elmorestadium.ir/public/team.html">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="آشنایی با تیم Elmore Stadium | برنامه‌نویسان و طراحان">
+<meta property="og:description" content="با اعضای تیم Elmore Stadium آشنا شوید — برنامه‌نویسان، طراحان و متخصصانی که پروژه‌ها و دوره‌های آموزشی را می‌سازند.">
+<meta property="og:url" content="https://elmorestadium.ir/public/team.html">
+<meta property="og:image" content="https://elmorestadium.ir/assets/images/logo.jpg">
+<meta property="og:locale" content="fa_IR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="آشنایی با تیم Elmore Stadium | برنامه‌نویسان و طراحان">
+<meta name="twitter:description" content="با اعضای تیم Elmore Stadium آشنا شوید — برنامه‌نویسان، طراحان و متخصصانی که پروژه‌ها و دوره‌های آموزشی را می‌سازند.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/design-system.css">
 <style>
 /* =========================================================
    Elmore Stadium — Shared Stylesheet
@@ -245,6 +258,17 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 #backToTop:hover{ background:var(--purple, #a855f7);}
 @media(max-width:640px){ #backToTop{ bottom:16px; left:16px; width:42px; height:42px;} }
 
+/* Team stories */
+.story-row{ display:flex; gap:22px; flex-wrap:wrap;}
+.story-item{ display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;}
+.story-avatar{ width:74px; height:74px; border-radius:50%; padding:3px; background:conic-gradient(var(--purple),var(--cyan),var(--purple)); flex-shrink:0;}
+.story-avatar img{ width:100%; height:100%; border-radius:50%; object-fit:cover; display:block; border:2px solid var(--bg-0,#08050f);}
+.story-item span{ font-size:12px; color:var(--text-2);}
+.story-modal{ position:fixed; inset:0; background:rgba(0,0,0,.85); z-index:999; display:none; align-items:center; justify-content:center; padding:20px;}
+.story-modal.show{ display:flex;}
+.story-modal-content{ width:100%; max-width:320px; border-radius:22px; padding:32px 24px; text-align:center; background:linear-gradient(160deg, var(--purple-2), #1a1030); display:flex; flex-direction:column; align-items:center; gap:10px;}
+.story-modal-avatar{ width:84px; height:84px; border-radius:50%; object-fit:cover; margin-bottom:8px; border:3px solid rgba(255,255,255,.2);}
+
 /* Responsive */
 @media(max-width:960px){
   .mobile-nav-toggle{ display:flex;}
@@ -341,6 +365,20 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </div>
 </section>
 <section><div class="wrap">
+<div class="story-row" style="justify-content:center; margin-bottom:36px;">
+  <div class="story-item" onclick="openTeamStory('morteza')">
+    <div class="story-avatar"><img src="../assets/images/team/morteza-barati.jpg" alt="مرتضی"></div>
+    <span>مرتضی</span>
+  </div>
+  <div class="story-item" onclick="openTeamStory('elena')">
+    <div class="story-avatar"><img src="../assets/images/team/elena-ebrahimpour.jpg" alt="النا"></div>
+    <span>النا</span>
+  </div>
+  <div class="story-item" onclick="openTeamStory('zeinab')">
+    <div class="story-avatar"><img src="../assets/images/team/zeinab-karimzadeh.jpg" alt="زینب"></div>
+    <span>زینب</span>
+  </div>
+</div>
 <div class="team-grid"><div class="team-card glass glass-hover" data-reveal data-reveal-delay="1"><img src="../assets/images/team/morteza-barati.jpg" alt="مرتضی براتی" style="width:76px;height:76px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block;"><h4>مرتضی براتی</h4><p class="role">مدیر تیم و برنامه‌نویس</p>
     <div class="tag-row" style="justify-content:center; margin-bottom:12px;"><span class="tag">Python</span><span class="tag">HTML</span></div>
     <div class="social-row"><a href="https://t.me/ElmoreStadium" target="_blank" style="text-decoration:none;color:inherit;"><img src="../assets/images/telegram-icon.png" alt="تلگرام" style="width:18px;height:18px;vertical-align:middle;"></a><a href="tel:09130873216" style="text-decoration:none;color:inherit;"><span>📞</span></a></div></div><div class="team-card glass glass-hover" data-reveal data-reveal-delay="2"><img src="../assets/images/team/elena-ebrahimpour.jpg" alt="النا ابراهیم‌پور" style="width:76px;height:76px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block;"><h4>النا ابراهیم‌پور</h4><p class="role">مدیر تیم و برنامه‌نویس وب‌سایت‌ساز</p>
@@ -356,7 +394,17 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   <p style="color:var(--text-1); margin-bottom:16px;">دوست دارید به تیم ما بپیوندید؟</p>
   <a href="membership-request.html" class="btn btn-primary">ثبت درخواست عضویت</a>
 </div>
-</div></section><footer class="site">
+</div></section>
+<div class="story-modal" id="teamStoryModal" onclick="closeTeamStory()">
+  <div class="story-modal-content" onclick="event.stopPropagation()">
+    <img id="storyModalImg" src="" alt="" class="story-modal-avatar">
+    <h3 id="storyModalName"></h3>
+    <p id="storyModalRole" style="color:var(--violet-glow); font-size:13px;"></p>
+    <p id="storyModalText" style="font-size:13.5px; color:var(--text-1); line-height:1.9;"></p>
+    <button class="btn btn-ghost" onclick="closeTeamStory()">بستن</button>
+  </div>
+</div>
+<footer class="site">
   <div class="wrap">
     <div class="footer-grid">
       <div>
@@ -422,6 +470,25 @@ function toggleMobileNav(){
 <div id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="بازگشت به بالا">↑</div>
 </body>
 
+<script>
+const teamStories = {
+  morteza: { name:'مرتضی براتی', role:'مدیر تیم و برنامه‌نویس', img:'../assets/images/team/morteza-barati.jpg', text:'بنیان‌گذار Elmore Stadium. عاشق ساختن چیزهای جدید با کد و همیشه دنبال یادگیری تکنولوژی‌های تازه‌ام.' },
+  elena: { name:'النا ابراهیم‌پور', role:'مدیر تیم و برنامه‌نویس وب‌سایت‌ساز', img:'../assets/images/team/elena-ebrahimpour.jpg', text:'مسئول طراحی و توسعه‌ی وب‌سایت‌ها. تمرکزم روی ساخت رابط‌های کاربری تمیز و کاربردیه.' },
+  zeinab: { name:'زینب کریم‌زاده ثانی', role:'گرافیست و طراح', img:'../assets/images/team/zeinab-karimzadeh.jpg', text:'طراحی بصری و هویت گرافیکی پروژه‌ها با من. عاشق رنگ و ترکیب‌بندی‌های خلاقانه‌ام.' }
+};
+function openTeamStory(key){
+  const s = teamStories[key];
+  if(!s) return;
+  document.getElementById('storyModalImg').src = s.img;
+  document.getElementById('storyModalName').textContent = s.name;
+  document.getElementById('storyModalRole').textContent = s.role;
+  document.getElementById('storyModalText').textContent = s.text;
+  document.getElementById('teamStoryModal').classList.add('show');
+}
+function closeTeamStory(){
+  document.getElementById('teamStoryModal').classList.remove('show');
+}
+</script>
 <script>
 (function(){
   const btn = document.getElementById('backToTop');
