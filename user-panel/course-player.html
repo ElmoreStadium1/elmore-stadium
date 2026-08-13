@@ -440,9 +440,10 @@ function elmoreShowMessage(elementId, message, isError) {
 
 </script>
 <script>
+let coursePlayerUser = null;
 (async function(){
   const user = await elmoreRequireAuth('../public/auth.html');
-  if(user){ elmoreShowUserName(); loadCoursePlayer(user); }
+  if(user){ coursePlayerUser = user; elmoreShowUserName(); loadCoursePlayer(user); }
 })();
 
 function getQueryParam(name){
@@ -516,6 +517,13 @@ async function loadCoursePlayer(user){
 async function markCourseComplete(enrollmentId){
   const { error } = await sb.from('enrollments').update({ progress: 100 }).eq('id', enrollmentId);
   if(error){ alert('خطا: ' + error.message); return; }
+
+  // اعطای ۵۰ امتیاز (XP) بابت تکمیل دوره
+  if(coursePlayerUser){
+    const { data: profile } = await sb.from('profiles').select('xp').eq('id', coursePlayerUser.id).single();
+    const currentXp = (profile && profile.xp) || 0;
+    await sb.from('profiles').update({ xp: currentXp + 50 }).eq('id', coursePlayerUser.id);
+  }
   location.reload();
 }
 

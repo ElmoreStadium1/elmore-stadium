@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16.png">
 <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
 <script src="/assets/js/pwa.js" defer></script>
-<title>اعلان‌ها | Elmore Stadium</title>
+<title>جزئیات پروژه | Elmore Stadium</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -248,6 +248,20 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 .footer-grid a:hover{ color:var(--violet-glow);}
 .footer-bottom{ text-align:center; color:var(--text-2); font-size:12.5px; padding-top:24px; border-top:1px solid var(--glass-brd);}
 
+/* Project Milestones */
+.pmilestone-row{ display:flex; align-items:center; padding:20px 4px; }
+.pmilestone{ display:flex; flex-direction:column; align-items:center; gap:8px; flex-shrink:0; }
+.pmilestone-dot{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; background:var(--glass); border:1px solid var(--glass-brd); color:var(--text-2); }
+.pmilestone.done .pmilestone-dot{ background:linear-gradient(135deg,var(--purple),var(--cyan)); color:#fff; border-color:transparent; }
+.pmilestone.active .pmilestone-dot{ border-color:var(--purple); color:var(--violet-glow); box-shadow:0 0 0 4px rgba(168,85,247,.15); }
+.pmilestone span{ font-size:11px; color:var(--text-2); white-space:nowrap; }
+.pmilestone.done span, .pmilestone.active span{ color:var(--text-0); }
+.pmilestone-line{ flex:1; height:2px; background:var(--glass-brd); margin:0 4px 20px; }
+.pdetail-meta{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; padding-top:14px; border-top:1px solid var(--glass-brd); }
+.pdetail-meta span{ display:block; font-size:11px; color:var(--text-2); margin-bottom:4px; }
+.pdetail-meta strong{ font-size:13px; }
+@media(max-width:640px){ .pmilestone-row{ overflow-x:auto; } .pmilestone span{ font-size:10px; } .pdetail-meta{ grid-template-columns:1fr; gap:10px; } }
+
 /* Responsive */
 @media(max-width:960px){
   nav.main-nav, header .navbar-actions{ display:none;}
@@ -327,7 +341,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <a class="nav-item" href="profile.html"><span class="nav-icon">👤</span> پروفایل</a>
 <a class="nav-item" href="my-courses.html"><span class="nav-icon">🎓</span> دوره‌های من</a>
 <a class="nav-item" href="my-projects.html"><span class="nav-icon">📁</span> پروژه‌های من</a>
-<a class="nav-item active" href="notifications.html"><span class="nav-icon">🔔</span> اعلان‌ها</a>
+<a class="nav-item" href="notifications.html"><span class="nav-icon">🔔</span> اعلان‌ها</a>
 <a class="nav-item" href="downloads.html"><span class="nav-icon">⬇️</span> دانلودها</a>
 
     <div class="nav-divider">درخواست‌ها</div>
@@ -342,22 +356,15 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </aside>
 <main class="main">
 <div class="topbar">
-      <div><h1>اعلان‌ها</h1><p>تمامی اعلان‌ها و به‌روزرسانی‌های حساب شما</p></div>
+      <div><h1 id="playerTitle">جزئیات پروژه</h1><p><a href="my-projects.html" style="color:var(--violet-glow);">← بازگشت به پروژه‌های من</a></p></div>
       <div class="top-actions">
         <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">ا</div><span id="userChipName"><span class="mini-spinner"></span>در حال بارگذاری...</span></div>
       </div>
-    </div><div class="panel glass" data-reveal data-reveal-delay="1">
-  <div class="panel-head"><h3>همه اعلان‌ها</h3><a href="#" onclick="markAllRead(); return false;">علامت‌گذاری همه به‌عنوان خوانده‌شده</a></div>
-  <div class="ds-tabs" id="notifTabs">
-    <div class="ds-tab active" data-cat="all" onclick="filterNotifs('all', this)">همه</div>
-    <div class="ds-tab" data-cat="project" onclick="filterNotifs('project', this)">پروژه‌ها</div>
-    <div class="ds-tab" data-cat="course" onclick="filterNotifs('course', this)">دوره‌ها</div>
-    <div class="ds-tab" data-cat="support" onclick="filterNotifs('support', this)">پشتیبانی</div>
-    <div class="ds-tab" data-cat="system" onclick="filterNotifs('system', this)">سیستم</div>
-  </div>
-  <div id="notifList"><p style="color:var(--text-2);"><span class="mini-spinner"></span>در حال بارگذاری...</p></div>
+    </div>
+<div class="panel glass" data-reveal data-reveal-delay="1">
+  <div id="playerContent"><p style="color:var(--text-2);"><span class="mini-spinner"></span>در حال بارگذاری...</p></div>
 </div>
 </main>
 </div>
@@ -447,62 +454,61 @@ function elmoreShowMessage(elementId, message, isError) {
 
 </script>
 <script>
+let projectDetailUser = null;
 (async function(){
   const user = await elmoreRequireAuth('../public/auth.html');
-  if(user){ elmoreShowUserName(); loadNotifications(user); }
+  if(user){ projectDetailUser = user; elmoreShowUserName(); loadProjectDetail(user); }
 })();
 
-let notifUser = null;
-
-let allNotifs = [];
-let activeNotifCat = 'all';
-
-function detectNotifCategory(message){
-  if(/پروژه|سفارش/.test(message)) return 'project';
-  if(/دوره|درس/.test(message)) return 'course';
-  if(/تیکت|پشتیبانی/.test(message)) return 'support';
-  return 'system';
-}
-const notifCatMeta = {
-  project:{ icon:'📁', label:'پروژه' }, course:{ icon:'🎓', label:'دوره' },
-  support:{ icon:'🎫', label:'پشتیبانی' }, system:{ icon:'🔔', label:'سیستم' }
-};
-
-async function loadNotifications(user){
-  notifUser = user;
-  const { data, error } = await sb.from('notifications').select('*').eq('user_id', user.id).order('created_at', { ascending: false });
-  if(error){ document.getElementById('notifList').innerHTML = '<p style="color:#f87171;">خطا در بارگذاری</p>'; return; }
-  allNotifs = data || [];
-  renderNotifList();
+function getQueryParam(name){
+  const params = new URLSearchParams(window.location.search);
+  return params.get(name);
 }
 
-function filterNotifs(cat, el){
-  activeNotifCat = cat;
-  document.querySelectorAll('#notifTabs .ds-tab').forEach(t=>t.classList.remove('active'));
-  el.classList.add('active');
-  renderNotifList();
-}
+const projectStages = ['درخواست','بررسی','طراحی','توسعه','تست','تحویل'];
 
-function renderNotifList(){
-  const listEl = document.getElementById('notifList');
-  const filtered = activeNotifCat === 'all' ? allNotifs : allNotifs.filter(n => detectNotifCategory(n.message) === activeNotifCat);
-  if(filtered.length === 0){ listEl.innerHTML = '<p style="color:var(--text-2);">اعلانی در این دسته نیست.</p>'; return; }
-  listEl.innerHTML = filtered.map(n=>{
-    const cat = detectNotifCategory(n.message);
-    const meta = notifCatMeta[cat];
-    const dot = n.is_read ? '<div style="width:8px;height:8px;flex-shrink:0;"></div>' : '<div style="width:8px;height:8px;border-radius:50%;background:var(--purple);margin-top:6px;flex-shrink:0;"></div>';
-    const date = new Date(n.created_at).toLocaleDateString('fa-IR');
-    return `<div style="display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--glass-brd);">
-      ${dot}<div class="card-icon" style="width:36px;height:36px; font-size:15px;">${meta.icon}</div>
-      <div style="flex:1;"><p style="font-size:13px;color:var(--text-1);">${n.message}</p><span style="font-size:11px;color:var(--text-2);">${meta.label} · ${date}</span></div>
+async function loadProjectDetail(user){
+  const orderId = getQueryParam('order_id');
+  const contentEl = document.getElementById('playerContent');
+  if(!orderId){ contentEl.innerHTML = '<p style="color:#f87171;">پروژه‌ای مشخص نشده است.</p>'; return; }
+
+  const { data: order, error } = await sb.from('project_orders').select('*').eq('id', orderId).eq('user_id', user.id).single();
+  if(error || !order){ contentEl.innerHTML = '<p style="color:#f87171;">این پروژه یافت نشد یا متعلق به شما نیست.</p>'; return; }
+
+  document.getElementById('playerTitle').textContent = order.title;
+
+  const currentStage = order.current_stage || 'درخواست';
+  const currentIdx = projectStages.indexOf(currentStage);
+  const isDelivered = order.status === 'تحویل شده';
+
+  const timelineHtml = projectStages.map(function(stage, idx){
+    const done = idx < currentIdx || isDelivered;
+    const active = idx === currentIdx && !isDelivered;
+    const cls = done ? 'done' : (active ? 'active' : '');
+    return `<div class="pmilestone ${cls}"><div class="pmilestone-dot">${done ? '✓' : (idx+1)}</div><span>${stage}</span></div>`;
+  }).join('<div class="pmilestone-line"></div>');
+
+  const budget = order.budget ? Number(order.budget).toLocaleString('en-US') + ' تومان' : '-';
+  const date = order.created_at ? new Date(order.created_at).toLocaleDateString('fa-IR') : '-';
+
+  contentEl.innerHTML = `
+    <div class="pmilestone-row">${timelineHtml}</div>
+    <div class="ds-card glass" style="margin-top:28px; padding:22px;">
+      <div class="ds-badge ds-badge-${isDelivered ? 'success' : 'warning'}" style="margin-bottom:14px;">${order.status || 'در انتظار بررسی'}</div>
+      <p style="font-size:13.5px; color:var(--text-1); line-height:1.9; margin-bottom:16px;">${order.description || 'بدون توضیحات'}</p>
+      <div class="pdetail-meta">
+        <div><span>بودجه</span><strong>${budget}</strong></div>
+        <div><span>مدت زمان</span><strong>${order.duration || '-'}</strong></div>
+        <div><span>تاریخ ثبت</span><strong>${date}</strong></div>
+      </div>
     </div>`;
-  }).join('');
 }
+</script>
 
-async function markAllRead(){
-  if(!notifUser) return;
-  await sb.from('notifications').update({ is_read: true }).eq('user_id', notifUser.id);
-  loadNotifications(notifUser);
+<script>
+function toFarsiDigits(n){
+  const map = {'0':'۰','1':'۱','2':'۲','3':'۳','4':'۴','5':'۵','6':'۶','7':'۷','8':'۸','9':'۹'};
+  return String(n).replace(/[0-9]/g, function(d){ return map[d]; });
 }
 </script>
 

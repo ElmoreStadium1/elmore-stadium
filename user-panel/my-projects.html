@@ -457,7 +457,7 @@ async function loadOrders(user){
   body.innerHTML = data.map(o => {
     const date = new Date(o.created_at).toLocaleDateString('fa-IR');
     const cls = badgeMap[o.status] || 'badge-pending';
-    return `<tr><td>${o.title}</td><td>${date}</td><td>${o.budget || '-'}</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
+    return `<tr style="cursor:pointer;" onclick="window.location.href='project-detail.html?order_id=${o.id}'"><td>${o.title}</td><td>${date}</td><td>${o.budget || '-'}</td><td><span class="badge ${cls}">${o.status}</span></td></tr>`;
   }).join('');
 }
 
