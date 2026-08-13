@@ -10,8 +10,10 @@
 <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
 <script src="/assets/js/pwa.js" defer></script>
 <title>سفارش‌های پروژه | Elmore Stadium</title>
+<meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/design-system.css">
 <style>
 .mini-spinner{ display:inline-block; width:15px; height:15px; border:2px solid rgba(168,85,247,.25); border-top-color:var(--purple, #a855f7); border-radius:50%; animation:mini-spin .7s linear infinite; vertical-align:-3px; margin-left:8px;}
 @keyframes mini-spin{ to{ transform:rotate(360deg); } }
@@ -356,7 +358,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="toolbar">
       <div class="search-box glass"><span>🔍</span><input placeholder="جستجو..."></div>
     </div>
-    <table><thead><tr><th>عنوان پروژه</th><th>بودجه</th><th>مدت</th><th>تاریخ ثبت</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody id="ordersBody"><tr><td colspan="6" style="text-align:center;color:var(--text-2);"><span class="mini-spinner"></span>در حال بارگذاری...</td></tr></tbody></table>
+    <table><thead><tr><th>عنوان پروژه</th><th>بودجه</th><th>مدت</th><th>تاریخ ثبت</th><th>مرحله</th><th>وضعیت</th><th>عملیات</th></tr></thead><tbody id="ordersBody"><tr><td colspan="7" style="text-align:center;color:var(--text-2);"><span class="mini-spinner"></span>در حال بارگذاری...</td></tr></tbody></table>
   </div>
 </main>
 </div>
@@ -480,21 +482,29 @@ async function onAdminReady(){
 async function loadOrders(){
   const { data, error } = await sb.from('project_orders').select('*').order('created_at', { ascending: false });
   const body = document.getElementById('ordersBody');
-  if(error){ body.innerHTML = '<tr><td colspan="6" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
-  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-2);">هنوز سفارشی ثبت نشده.</td></tr>'; return; }
+  if(error){ body.innerHTML = '<tr><td colspan="7" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
+  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-2);">هنوز سفارشی ثبت نشده.</td></tr>'; return; }
   const badgeMap = { 'در انتظار بررسی':'badge-pending', 'تأیید شده':'badge-approved', 'در حال توسعه':'badge-active', 'تحویل شده':'badge-active', 'رد شده':'badge-rejected' };
   const statuses = ['در انتظار بررسی', 'تأیید شده', 'در حال توسعه', 'تحویل شده', 'رد شده'];
+  const stages = ['درخواست','بررسی','طراحی','توسعه','تست','تحویل'];
   body.innerHTML = data.map(o=>{
     const cls = badgeMap[o.status] || 'badge-pending';
     const date = new Date(o.created_at).toLocaleDateString('fa-IR');
     const budget = o.budget ? Number(o.budget).toLocaleString('en-US') + ' تومان' : '-';
     const options = statuses.map(s => `<option value="${s}" ${s===o.status?'selected':''}>${s}</option>`).join('');
+    const stageOptions = stages.map(s => `<option value="${s}" ${s===(o.current_stage||'درخواست')?'selected':''}>${s}</option>`).join('');
     return `<tr><td>${o.title||'-'}</td><td>${budget}</td><td>${o.duration||'-'}</td><td>${date}</td>
+      <td><select onchange="updateOrderStage('${o.id}', this.value)" style="background:var(--glass); color:var(--text-0); border:1px solid var(--glass-brd); border-radius:8px; padding:4px 8px; font-size:12px;">${stageOptions}</select></td>
       <td><span class="badge ${cls}">${o.status||'در انتظار بررسی'}</span></td>
       <td class='table-actions'>
         <select onchange="updateOrderStatus('${o.id}', this.value)" style="background:var(--glass); color:var(--text-0); border:1px solid var(--glass-brd); border-radius:8px; padding:4px 8px; font-size:12px;">${options}</select>
       </td></tr>`;
   }).join('');
+}
+
+async function updateOrderStage(id, newStage){
+  const { error } = await sb.from('project_orders').update({ current_stage: newStage }).eq('id', id);
+  if(error){ alert('خطا: ' + error.message); }
 }
 
 async function updateOrderStatus(id, newStatus){
@@ -505,6 +515,12 @@ async function updateOrderStatus(id, newStatus){
       user_id: order.user_id,
       message: `وضعیت سفارش پروژه‌ی «${order.title}» شما به «${newStatus}» تغییر کرد.`
     });
+    // اعطای ۱۰۰ امتیاز (XP) بابت تحویل پروژه
+    if(newStatus === 'تحویل شده'){
+      const { data: profile } = await sb.from('profiles').select('xp').eq('id', order.user_id).single();
+      const currentXp = (profile && profile.xp) || 0;
+      await sb.from('profiles').update({ xp: currentXp + 100 }).eq('id', order.user_id);
+    }
   }
   loadOrders();
 }
