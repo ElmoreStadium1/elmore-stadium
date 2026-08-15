@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16.png">
 <link rel="apple-touch-icon" href="/assets/images/icons/apple-touch-icon.png">
 <script src="/assets/js/pwa.js" defer></script>
-<title>مدیریت سوالات متداول | Elmore Stadium</title>
+<title>مطالعات موردی | Elmore Stadium</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -331,14 +331,14 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <a class="nav-item" href="courses.html"><span class="nav-icon">🎓</span> دوره‌ها</a>
 <a class="nav-item" href="gallery.html"><span class="nav-icon">🖼️</span> گالری</a>
 <a class="nav-item" href="news.html"><span class="nav-icon">📰</span> اخبار</a>
-<a class="nav-item" href="case-studies.html"><span class="nav-icon">📊</span> مطالعات موردی</a>
+<a class="nav-item active" href="case-studies.html"><span class="nav-icon">📊</span> مطالعات موردی</a>
 
     <div class="nav-divider">درخواست‌ها</div>
     <a class="nav-item" href="orders.html"><span class="nav-icon">🧾</span> سفارش پروژه</a>
 <a class="nav-item" href="support-tickets.html"><span class="nav-icon">🎫</span> تیکت پشتیبانی</a>
 <a class="nav-item" href="membership-requests.html"><span class="nav-icon">📝</span> درخواست عضویت</a>
 <a class="nav-item" href="comments.html"><span class="nav-icon">💬</span> نظرات</a>
-<a class="nav-item active" href="faq.html"><span class="nav-icon">❓</span> سوالات متداول</a>
+<a class="nav-item" href="faq.html"><span class="nav-icon">❓</span> سوالات متداول</a>
 
     <div class="nav-divider">سیستم</div>
     <a class="nav-item" href="files.html"><span class="nav-icon">📂</span> فایل‌ها</a>
@@ -349,16 +349,26 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </aside>
 <main class="main">
 <div class="topbar">
-      <div><h1>مدیریت سوالات متداول</h1><p>افزودن و ویرایش سوالات متداول سایت</p></div>
+      <div><h1>مدیریت اخبار</h1><p>انتشار و مدیریت اخبار سایت</p></div>
       <div class="top-actions">
         <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">م</div><span id="userChipName"><span class="mini-spinner"></span>در حال بارگذاری...</span></div>
       </div>
     </div><div class="panel glass" data-reveal data-reveal-delay="1">
-    <div class="panel-head"><h3>همه سوالات</h3></div>
-    <table><thead><tr><th>سوال</th><th>وضعیت</th></tr></thead><tbody><tr><td>چطور می‌تونم سفارش پروژه ثبت کنم؟</td><td><span class="badge badge-active">منتشرشده</span></td></tr><tr><td>دوره‌های آموزشی چطور برگزار می‌شوند؟</td><td><span class="badge badge-active">منتشرشده</span></td></tr><tr><td>آیا امکان همکاری به‌عنوان عضو تیم وجود دارد؟</td><td><span class="badge badge-active">منتشرشده</span></td></tr><tr><td>هزینه پروژه‌ها چگونه تعیین می‌شود؟</td><td><span class="badge badge-active">منتشرشده</span></td></tr><tr><td colspan="2" style="color:var(--text-2); font-size:12px; text-align:center; padding:14px;">+ ۶ سوال دیگر (مجموعاً ۱۰ سوال در صفحه‌ی عمومی)</td></tr></tbody></table>
-    <p style="margin-top:16px; font-size:12.5px; color:var(--text-2);">ℹ️ این بخش فعلاً فقط نمایشیه. برای اضافه/ویرایش سوالات، باید مستقیم فایل <code>public/faq.html</code> ویرایش بشه.</p>
+    <div class="panel-head"><h3>افزودن مطالعه‌ی موردی جدید</h3></div>
+    <div class="field"><label>عنوان پروژه</label><input id="csTitle" placeholder="مثلاً: آموزش زبان انگلیسی کودکان"></div>
+    <div class="field"><label>مسئله (Problem)</label><textarea id="csProblem" placeholder="مشتری با چه مشکلی به ما مراجعه کرد؟"></textarea></div>
+    <div class="field"><label>ایده (Idea)</label><textarea id="csIdea" placeholder="چه راه‌حلی پیشنهاد دادیم؟"></textarea></div>
+    <div class="field"><label>طراحی (Design)</label><textarea id="csDesign" placeholder="چطور طراحی کردیم؟"></textarea></div>
+    <div class="field"><label>ساخت (Build)</label><textarea id="csBuild" placeholder="چطور ساختیم؟"></textarea></div>
+    <div class="field"><label>نتیجه (Result)</label><textarea id="csResult" placeholder="نتیجه‌ی نهایی چی شد؟"></textarea></div>
+    <p id="csMsg" style="display:none; font-size:13px; margin-bottom:10px;"></p>
+    <button class="btn btn-primary btn-sm" id="addCsBtn" onclick="addCaseStudy()">+ افزودن مطالعه‌ی موردی</button>
+  </div>
+  <div class="panel glass" style="margin-top:20px;" data-reveal data-reveal-delay="2">
+    <div class="panel-head"><h3>همه‌ی مطالعات موردی</h3></div>
+    <table><thead><tr><th>عنوان</th><th>تاریخ</th><th>عملیات</th></tr></thead><tbody id="csBody"><tr><td colspan="3" style="text-align:center;color:var(--text-2);"><span class="mini-spinner"></span>در حال بارگذاری...</td></tr></tbody></table>
   </div>
 </main>
 </div>
@@ -473,6 +483,48 @@ function elmoreShowMessage(elementId, message, isError) {
     if(typeof onAdminReady === 'function'){ onAdminReady(adminUser); }
   }
 })();
+
+async function onAdminReady(){
+  await loadCaseStudiesAdmin();
+}
+
+async function loadCaseStudiesAdmin(){
+  const { data, error } = await sb.from('case_studies').select('*').order('created_at', { ascending: false });
+  const body = document.getElementById('csBody');
+  if(error){ body.innerHTML = '<tr><td colspan="3" style="color:#f87171;">خطا: '+error.message+'</td></tr>'; return; }
+  if(!data || data.length===0){ body.innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--text-2);">هنوز مطالعه‌ی موردی ثبت نشده.</td></tr>'; return; }
+  body.innerHTML = data.map(function(cs){
+    const date = new Date(cs.created_at).toLocaleDateString('fa-IR');
+    return `<tr><td>${cs.title}</td><td>${date}</td><td class='table-actions'><button class="icon-btn" onclick="deleteCaseStudy('${cs.id}')">🗑️</button></td></tr>`;
+  }).join('');
+}
+
+async function addCaseStudy(){
+  const title = document.getElementById('csTitle').value.trim();
+  const problem = document.getElementById('csProblem').value.trim();
+  const idea = document.getElementById('csIdea').value.trim();
+  const design_text = document.getElementById('csDesign').value.trim();
+  const build_text = document.getElementById('csBuild').value.trim();
+  const result_text = document.getElementById('csResult').value.trim();
+  if(!title){ elmoreShowMessage('csMsg', 'لطفاً عنوان پروژه را وارد کنید', true); return; }
+
+  const btn = document.getElementById('addCsBtn');
+  btn.textContent = 'در حال ثبت...'; btn.disabled = true;
+  const { error } = await sb.from('case_studies').insert({ title, problem, idea, design_text, build_text, result_text });
+  btn.textContent = '+ افزودن مطالعه‌ی موردی'; btn.disabled = false;
+
+  if(error){ elmoreShowMessage('csMsg', 'خطا: ' + error.message, true); return; }
+  elmoreShowMessage('csMsg', 'مطالعه‌ی موردی با موفقیت ثبت شد.', false);
+  ['csTitle','csProblem','csIdea','csDesign','csBuild','csResult'].forEach(id => document.getElementById(id).value = '');
+  loadCaseStudiesAdmin();
+}
+
+async function deleteCaseStudy(id){
+  if(!confirm('این مطالعه‌ی موردی حذف شود؟')) return;
+  const { error } = await sb.from('case_studies').delete().eq('id', id);
+  if(error){ alert('خطا: ' + error.message); return; }
+  loadCaseStudiesAdmin();
+}
 </script>
 
 <script>
