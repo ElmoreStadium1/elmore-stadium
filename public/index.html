@@ -414,6 +414,13 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 .bento-projects{ display:grid; grid-template-columns:1.35fr 1fr; grid-template-rows:repeat(2,auto); gap:22px;}
 .bento-p1{ grid-row:span 2; display:flex; flex-direction:column; justify-content:center;}
 @media(max-width:900px){ .bento-projects{ grid-template-columns:1fr;} .bento-p1{ grid-row:span 1;} }
+.cs-steps{ display:flex; align-items:flex-start; gap:14px; flex-wrap:wrap; }
+.cs-step{ display:flex; gap:10px; flex:1; min-width:160px; }
+.cs-step-icon{ font-size:18px; flex-shrink:0; }
+.cs-step strong{ display:block; font-size:12.5px; margin-bottom:4px; color:var(--violet-glow); }
+.cs-step p{ font-size:12px; color:var(--text-1); line-height:1.7; }
+.cs-step-arrow{ color:var(--text-2); align-self:center; font-size:14px; }
+@media(max-width:768px){ .cs-steps{ flex-direction:column;} .cs-step-arrow{ display:none;} }
 @media(max-width:900px){ #customCursor{ display:none;} body{ cursor:auto !important;} }
 @media(pointer:coarse){ #customCursor{ display:none;} }
 
@@ -551,6 +558,15 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <div class="card glass glass-hover bento-p3" data-reveal data-reveal-delay="2"><span class="status-badge status-progress">در حال توسعه</span><div class="card-icon" style="overflow:hidden; padding:0;"><img src="../assets/images/projects/freefire-tutorial-app.jpg" alt="آموزش فری فایر" style="width:100%;height:100%;object-fit:cover;border-radius:14px;"></div><h3>آموزش فری فایر</h3><p>معرفی کامل بخش‌های مختلف بازی فری‌فایر.</p><button class="btn btn-ghost btn-block" style="margin-top:12px; font-size:12.5px; padding:8px;" onclick="showProjectDownloadMsg(this)">دانلود پروژه</button></div>
     </div>
     <div style="text-align:center; margin-top:30px;"><a href="projects.html" class="btn btn-ghost">مشاهده همه پروژه‌ها</a></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="section-head" data-reveal><div class="section-eyebrow">مطالعه موردی</div><h2 class="section-title">پشت‌صحنه‌ی یک پروژه</h2></div>
+    <div id="caseStudiesList">
+      <p style="color:var(--text-2); text-align:center;">در حال بارگذاری...</p>
+    </div>
   </div>
 </section>
 
@@ -778,6 +794,32 @@ async function loadActiveUsersCount(){
 }
 loadActiveUsersCount();
 loadComments();
+
+async function loadCaseStudies(){
+  const { data, error } = await sb.from('case_studies').select('*').order('created_at', { ascending: false }).limit(2);
+  const el = document.getElementById('caseStudiesList');
+  if(error || !data || data.length === 0){
+    el.innerHTML = '<p style="color:var(--text-2); text-align:center;">هنوز مطالعه‌ی موردی منتشر نشده. به‌زودی اولین پروژه رو با جزئیات کامل اینجا می‌بینید.</p>';
+    return;
+  }
+  const stepMeta = [
+    { key:'problem', label:'مسئله', icon:'❓' },
+    { key:'idea', label:'ایده', icon:'💡' },
+    { key:'design_text', label:'طراحی', icon:'🎨' },
+    { key:'build_text', label:'ساخت', icon:'⚙️' },
+    { key:'result_text', label:'نتیجه', icon:'🏆' },
+  ];
+  el.innerHTML = data.map(function(cs){
+    const stepsHtml = stepMeta.filter(s => cs[s.key]).map(function(s){
+      return `<div class="cs-step"><div class="cs-step-icon">${s.icon}</div><div><strong>${s.label}</strong><p>${cs[s.key]}</p></div></div>`;
+    }).join('<div class="cs-step-arrow">→</div>');
+    return `<div class="glass" style="padding:28px; margin-bottom:20px; border-radius:20px;" data-reveal>
+      <h3 style="font-size:18px; margin-bottom:16px;">${cs.title}</h3>
+      <div class="cs-steps">${stepsHtml}</div>
+    </div>`;
+  }).join('');
+}
+loadCaseStudies();
 
 // ---- حالت روز/شب ----
 (function(){

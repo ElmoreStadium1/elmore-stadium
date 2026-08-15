@@ -364,6 +364,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
     <div class="field"><label>پیام</label><textarea id="contactMessage" placeholder="پیام خود را بنویسید..."></textarea></div>
     <p id="contactMsg" style="display:none; font-size:13px; margin-bottom:12px;"></p>
     <button class="btn btn-primary btn-block" id="contactBtn" onclick="submitContactMessage()">ارسال پیام</button>
+<div id="dsToastHost"></div>
   </div>
 </div></section><footer class="site">
   <div class="wrap">
@@ -424,6 +425,16 @@ function contactShowMessage(elementId, message, isError) {
   el.style.color = isError ? "#f87171" : "#4ade80";
 }
 
+function dsToast(message, type){
+  const host = document.getElementById('dsToastHost');
+  if(!host) return;
+  const toast = document.createElement('div');
+  toast.className = 'ds-toast ' + (type || 'success');
+  toast.textContent = message;
+  host.appendChild(toast);
+  setTimeout(function(){ toast.remove(); }, 4000);
+}
+
 async function submitContactMessage(){
   const fullName = document.getElementById('contactName').value.trim();
   const contactInfo = document.getElementById('contactInfo').value.trim();
@@ -445,10 +456,12 @@ async function submitContactMessage(){
 
   if(error){
     contactShowMessage('contactMsg', 'خطا در ارسال پیام: ' + error.message, true);
+    dsToast('ارسال پیام ناموفق بود.', 'error');
     return;
   }
 
   contactShowMessage('contactMsg', 'پیام شما با موفقیت ارسال شد! به‌زودی باهاتون تماس می‌گیریم.', false);
+  dsToast('پیام شما با موفقیت ارسال شد ✓', 'success');
   document.getElementById('contactName').value = '';
   document.getElementById('contactInfo').value = '';
   document.getElementById('contactMessage').value = '';
