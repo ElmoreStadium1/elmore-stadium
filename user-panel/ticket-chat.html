@@ -344,7 +344,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <div class="topbar">
       <div><h1 id="playerTitle">گفتگوی تیکت</h1><p><a href="support-ticket.html" style="color:var(--violet-glow);">← بازگشت به تیکت‌های پشتیبانی</a></p></div>
       <div class="top-actions">
-        <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
+        <div class="mobile-menu-btn" onclick="toggleMobileSidebar()" role="button" tabindex="0" aria-label="باز کردن منو" onkeydown="if(event.key==='Enter')toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">ا</div><span id="userChipName"><span class="mini-spinner"></span>در حال بارگذاری...</span></div>
       </div>

@@ -259,6 +259,10 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 @keyframes miniSpin{ to{ transform:rotate(360deg); } }
 
 /* Responsive */
+@media(max-width:640px){
+  .player-level-card{ flex-direction:column; align-items:flex-start; text-align:right; }
+  .player-level-top{ flex-direction:column; align-items:flex-start; gap:2px; }
+}
 @media(max-width:960px){
   nav.main-nav, header .navbar-actions{ display:none;}
   .grid-3, .grid-4, .team-grid, .review-grid, .stats-row, .footer-grid, .field-row-2{ grid-template-columns:1fr 1fr;}
@@ -354,7 +358,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 <div class="topbar">
       <div><h1 id="dashGreeting">سلام 👋</h1><p>خلاصه‌ای از فعالیت‌های اخیر حساب شما</p></div>
       <div class="top-actions">
-        <div class="mobile-menu-btn" onclick="toggleMobileSidebar()">☰</div>
+        <div class="mobile-menu-btn" onclick="toggleMobileSidebar()" role="button" tabindex="0" aria-label="باز کردن منو" onkeydown="if(event.key==='Enter')toggleMobileSidebar()">☰</div>
         <div class="bell glass"></div>
         <div class="user-chip glass"><div class="av" id="userChipAvatar">ا</div><span id="userChipName"><span class="mini-spinner"></span>در حال بارگذاری...</span></div>
       </div>
