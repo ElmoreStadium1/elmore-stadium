@@ -348,7 +348,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
-    <div class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</div>
+    <div class="mobile-nav-toggle" onclick="toggleMobileNav()" role="button" tabindex="0" aria-label="باز کردن منو" onkeydown="if(event.key==='Enter')toggleMobileNav()">☰</div>
     <nav class="main-nav"><ul><li><a href="index.html">خانه</a></li><li><a href="team.html" class="active">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
       <a href="auth.html" class="btn btn-ghost" id="navAuthBtn">ورود / ثبت‌نام</a>
@@ -467,7 +467,7 @@ function toggleMobileNav(){
   document.querySelector('header.site').classList.toggle('nav-open');
 }
 </script>
-<div id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="بازگشت به بالا">↑</div>
+<div id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" role="button" tabindex="0" aria-label="بازگشت به بالای صفحه" title="بازگشت به بالا" onkeydown="if(event.key==='Enter')window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 </body>
 
 <script>

@@ -71,6 +71,8 @@ body.light-theme .theme-knob{ transform:translateX(-20px); background:linear-gra
 .sound-bars span:nth-child(3){ height:65%; animation-delay:.4s;}
 @keyframes soundBarAnim{ 0%,100%{ transform:scaleY(.4);} 50%{ transform:scaleY(1);} }
 .sound-toggle-btn.muted .sound-bars span{ animation-play-state:paused; opacity:.35; transform:scaleY(.3) !important;}
+.skip-link{ position:absolute; top:-100px; right:16px; z-index:9999; background:var(--purple); color:#fff; padding:10px 18px; border-radius:10px; text-decoration:none; font-size:13px; transition:top .2s ease; }
+.skip-link:focus{ top:16px; }
 *{box-sizing:border-box; margin:0; padding:0;}
 html{scroll-behavior:smooth;}
 body{
@@ -451,6 +453,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
 </style>
 </head>
 <body>
+<a href="#main-content" class="skip-link">پرش به محتوای اصلی</a>
 <div id="loadingScreen">
   <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="loader-logo" style="object-fit:cover;border-radius:12px;">
   <div class="loader-brand">ELMORE STADIUM</div>
@@ -469,7 +472,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
       <img src="../assets/images/logo.jpg" alt="Elmore Stadium" class="logo-mark" style="object-fit:cover;box-shadow:none;background:none;">
       <div>Elmore<span class="logo-sub">STADIUM</span></div>
     </a>
-    <div class="mobile-nav-toggle" onclick="toggleMobileNav()">☰</div>
+    <div class="mobile-nav-toggle" onclick="toggleMobileNav()" role="button" tabindex="0" aria-label="باز کردن منو" onkeydown="if(event.key==='Enter')toggleMobileNav()">☰</div>
     <nav class="main-nav"><ul><li><a href="index.html" class="active">خانه</a></li><li><a href="team.html">تیم</a></li><li><a href="projects.html">پروژه‌ها</a></li><li><a href="courses.html">دوره‌ها</a></li><li><a href="faq.html">سوالات متداول</a></li><li><a href="news.html">اخبار</a></li><li><a href="gallery.html">گالری</a></li><li><a href="contact.html">تماس با ما</a></li></ul></nav>
     <div class="navbar-actions">
       <button class="sound-toggle-btn muted" id="ambientSoundBtn" title="صدای محیطی">
@@ -482,6 +485,7 @@ footer.site{ border-top:1px solid var(--glass-brd); padding:50px 0 24px;}
   </div>
 </header>
 
+<main id="main-content">
 <section style="padding:70px 0 50px;">
   <div class="wrap" style="display:grid; grid-template-columns:1.1fr .9fr; gap:56px; align-items:center;">
     <div data-reveal>
@@ -621,6 +625,7 @@ function showProjectDownloadMsg(btn){
     </div>
   </div>
 </section>
+</main>
 <footer class="site">
   <div class="wrap">
     <div class="footer-grid">
@@ -1046,7 +1051,7 @@ function toggleMobileNav(){
   document.querySelector('header.site').classList.toggle('nav-open');
 }
 </script>
-<div id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="بازگشت به بالا">↑</div>
+<div id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" role="button" tabindex="0" aria-label="بازگشت به بالای صفحه" title="بازگشت به بالا" onkeydown="if(event.key==='Enter')window.scrollTo({top:0,behavior:'smooth'})">↑</div>
 
 <div class="cmdk-backdrop" id="cmdkBackdrop" onclick="closeCmdk(event)">
   <div class="cmdk-box glass-strong" onclick="event.stopPropagation()">
